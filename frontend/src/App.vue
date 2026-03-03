@@ -45,6 +45,7 @@
         <!-- 使用 v-if / v-else 简单演示页面切换 -->
         <Home v-if="activeMenu === 'home'" />
         <ClassManage v-else-if="activeMenu === 'classes'" />
+        <TeacherManage v-else-if="activeMenu === 'teachers'" />
         <ClassroomManage v-else-if="activeMenu === 'rooms'" />
         <div v-else class="placeholder-page">
           <el-empty
@@ -58,7 +59,6 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-import { ElMessage } from 'element-plus'
 import {
   House,
   Collection,
@@ -71,6 +71,7 @@ import {
 import Home from './views/Home.vue'
 import ClassManage from './views/ClassManage.vue'
 import ClassroomManage from './views/ClassroomManage.vue'
+import TeacherManage from './views/TeacherManage.vue'
 
 const menuItems = [
   { key: 'home', label: '首页', icon: House },
@@ -91,9 +92,6 @@ const currentPageTitle = computed(() => {
 
 const handleMenuSelect = (key) => {
   activeMenu.value = key
-  if (key !== 'home' && key !== 'classes' && key !== 'rooms') {
-    ElMessage.info(`当前为「${currentPageTitle.value}」占位页，之后可替换为真实页面或路由。`)
-  }
 }
 </script>
 

@@ -149,10 +149,9 @@
 </template>
 
 <script setup>
-axios.defaults.baseURL = '/api'
 import { onMounted, reactive, ref } from 'vue'
-import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import { getClassPage, addClass, deleteClass } from '../api/class'
 
 
 
@@ -210,7 +209,7 @@ const fetchClassPage = async () => {
       classMajor: searchForm.classMajor || undefined,
       classDepartment: searchForm.classDepartment || undefined
     }
-    const { data } = await axios.get('/class/page', { params })
+    const { data } = await getClassPage(params)
 
     if (data && data.code === 1 && data.data) {
       tableData.value = data.data.rows || []
@@ -280,7 +279,7 @@ const handleSubmit = () => {
         classGrade: dialogForm.classGrade,
         classNum: dialogForm.classNum
       }
-      const { data } = await axios.post('/class', payload)
+      const { data } = await addClass(payload)
       if (data && data.code === 1) {
         ElMessage.success('新增班级成功')
         dialogVisible.value = false
@@ -299,7 +298,7 @@ const handleSubmit = () => {
 const handleDelete = async (row) => {
   if (!row || !row.classId) return
   try {
-    const { data } = await axios.delete(`/class/${row.classId}`)
+    const { data } = await deleteClass(row.classId)
     if (data && data.code === 1) {
       ElMessage.success('删除成功')
       // 如果当前页只剩一个元素且不是第一页，删除后回到上一页

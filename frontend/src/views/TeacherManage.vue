@@ -4,11 +4,11 @@
     <section class="toolbar-card">
       <div class="toolbar-header">
         <div class="title-block">
-          <h2>教室管理</h2>
-          <p>按名称与类型快速检索教室信息。</p>
+          <h2>教师管理</h2>
+          <p>按姓名与院系快速检索教师信息。</p>
         </div>
         <el-button type="primary" class="add-btn" @click="handleOpenAddDialog">
-          添加教室
+          添加教师
         </el-button>
       </div>
 
@@ -18,24 +18,19 @@
         :model="searchForm"
         label-width="72px"
       >
-        <el-form-item label="教室名称">
+        <el-form-item label="教师姓名">
           <el-input
-            v-model="searchForm.classroomName"
-            placeholder="请输入教室名称"
+            v-model="searchForm.teacherName"
+            placeholder="请输入教师姓名"
             clearable
           />
         </el-form-item>
-        <el-form-item label="教室类型">
-          <el-select
-            v-model="searchForm.classroomType"
-            placeholder="请选择类型"
+        <el-form-item label="所属院系">
+          <el-input
+            v-model="searchForm.teacherDepartment"
+            placeholder="请输入所属院系"
             clearable
-            style="width: 180px"
-          >
-            <el-option label="普通教室" value="普通教室" />
-            <el-option label="计算机机房" value="计算机机房" />
-            <el-option label="实验室" value="实验室" />
-          </el-select>
+          />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleSearch">查询</el-button>
@@ -54,24 +49,25 @@
         header-row-class-name="table-header-row"
         class="class-table"
       >
-        <el-table-column prop="classroomId" label="编号" width="120" />
-        <el-table-column prop="classroomName" label="名称" min-width="140" />
-        <el-table-column prop="classroomType" label="类型" min-width="140" />
-        <el-table-column prop="classroomCap" label="容量" width="100" />
-        <el-table-column label="状态" width="120">
-          <template #default="{ row }">
-            <el-tag :type="getStateTagType(row.classroomState)">
-              {{ row.classroomState || '未知' }}
-            </el-tag>
-          </template>
-        </el-table-column>
+        <el-table-column prop="teacherId" label="工号" width="120" />
+        <el-table-column prop="teacherName" label="姓名" min-width="140" />
+        <el-table-column
+          prop="teacherDepartment"
+          label="院系"
+          min-width="160"
+        />
         <el-table-column label="操作" width="180" fixed="right">
           <template #default="{ row }">
-            <el-button type="primary" link size="small" @click="handleOpenEditDialog(row)">
+            <el-button
+              type="primary"
+              link
+              size="small"
+              @click="handleOpenEditDialog(row)"
+            >
               编辑
             </el-button>
             <el-popconfirm
-              title="确认删除该教室？"
+              title="确认删除该教师？"
               confirm-button-text="删除"
               cancel-button-text="取消"
               confirm-button-type="danger"
@@ -102,7 +98,7 @@
       </div>
     </section>
 
-    <!-- 新增/编辑教室弹窗 -->
+    <!-- 新增/编辑教师弹窗 -->
     <el-dialog
       v-model="dialogVisible"
       width="520px"
@@ -116,43 +112,21 @@
         label-width="96px"
         class="dialog-form"
       >
-        <el-form-item label="教室编号" prop="classroomId">
+        <el-form-item label="教师工号" prop="teacherId">
           <el-input
-            v-model.number="dialogForm.classroomId"
+            v-model.number="dialogForm.teacherId"
             :disabled="isEdit"
-            placeholder="请输入教室编号（需手动输入）"
+            placeholder="请输入教师工号（需手动输入）"
           />
         </el-form-item>
-        <el-form-item label="教室名称" prop="classroomName">
-          <el-input v-model="dialogForm.classroomName" placeholder="如 A101" />
+        <el-form-item label="教师姓名" prop="teacherName">
+          <el-input v-model="dialogForm.teacherName" placeholder="请输入教师姓名" />
         </el-form-item>
-        <el-form-item label="教室类型" prop="classroomType">
-          <el-select
-            v-model="dialogForm.classroomType"
-            placeholder="请选择教室类型"
-            style="width: 100%"
-          >
-            <el-option label="普通教室" value="普通教室" />
-            <el-option label="计算机机房" value="计算机机房" />
-            <el-option label="实验室" value="实验室" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="容纳人数" prop="classroomCap">
+        <el-form-item label="所属院系" prop="teacherDepartment">
           <el-input
-            v-model.number="dialogForm.classroomCap"
-            placeholder="请输入容量"
+            v-model="dialogForm.teacherDepartment"
+            placeholder="请输入所属院系/部门"
           />
-        </el-form-item>
-        <el-form-item label="状态" prop="classroomState">
-          <el-select
-            v-model="dialogForm.classroomState"
-            placeholder="请选择状态"
-            style="width: 100%"
-          >
-            <el-option label="可用" value="可用" />
-            <el-option label="被占用" value="被占用" />
-            <el-option label="维修" value="维修" />
-          </el-select>
         </el-form-item>
       </el-form>
 
@@ -172,18 +146,18 @@
 import { computed, onMounted, reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import {
-  getClassroomPage,
-  addClassroom,
-  updateClassroom,
-  deleteClassroom
-} from '../api/classroom'
+  getTeacherPage,
+  addTeacher,
+  updateTeacher,
+  deleteTeacher
+} from '../api/teacher'
 
 const tableData = ref([])
 const tableLoading = ref(false)
 
 const searchForm = reactive({
-  classroomName: '',
-  classroomType: ''
+  teacherName: '',
+  teacherDepartment: ''
 })
 
 const pagination = reactive({
@@ -198,63 +172,43 @@ const dialogFormRef = ref(null)
 const isEdit = ref(false)
 
 const dialogForm = reactive({
-  classroomId: null,
-  classroomName: '',
-  classroomType: '',
-  classroomCap: null,
-  classroomState: ''
+  teacherId: null,
+  teacherName: '',
+  teacherDepartment: ''
 })
 
 const dialogRules = {
-  classroomId: [
-    { required: true, message: '请输入教室编号', trigger: 'blur' }
+  teacherId: [
+    { required: true, message: '请输入教师工号', trigger: 'blur' }
   ],
-  classroomName: [
-    { required: true, message: '请输入教室名称', trigger: 'blur' }
+  teacherName: [
+    { required: true, message: '请输入教师姓名', trigger: 'blur' }
   ],
-  classroomType: [
-    { required: true, message: '请选择教室类型', trigger: 'change' }
-  ],
-  classroomCap: [
-    { required: true, message: '请输入容纳人数', trigger: 'blur' },
-    {
-      type: 'number',
-      message: '容量必须为数字',
-      trigger: ['blur', 'change']
-    }
-  ],
-  classroomState: [
-    { required: true, message: '请选择教室状态', trigger: 'change' }
+  teacherDepartment: [
+    { required: true, message: '请输入所属院系', trigger: 'blur' }
   ]
 }
 
-const dialogTitle = computed(() => (isEdit.value ? '编辑教室' : '添加教室'))
+const dialogTitle = computed(() => (isEdit.value ? '编辑教师' : '添加教师'))
 
-const getStateTagType = (state) => {
-  if (state === '可用') return 'success'
-  if (state === '维修') return 'danger'
-  if (state === '被占用') return 'warning'
-  return ''
-}
-
-const fetchClassroomPage = async () => {
+const fetchTeacherPage = async () => {
   tableLoading.value = true
   try {
     const params = {
       pageNum: pagination.pageNum,
       pageSize: pagination.pageSize,
-      classroomName: searchForm.classroomName || undefined,
-      classroomType: searchForm.classroomType || undefined
+      teacherName: searchForm.teacherName || undefined,
+      teacherDepartment: searchForm.teacherDepartment || undefined
     }
-    const { data } = await getClassroomPage(params)
+    const { data } = await getTeacherPage(params)
     if (data && data.code === 1 && data.data) {
       tableData.value = data.data.rows || []
       pagination.total = data.data.total || 0
     } else {
-      ElMessage.error(data?.msg || '获取教室列表失败')
+      ElMessage.error(data?.msg || '获取教师列表失败')
     }
   } catch (error) {
-    ElMessage.error('请求教室列表失败')
+    ElMessage.error('请求教师列表失败')
   } finally {
     tableLoading.value = false
   }
@@ -262,33 +216,31 @@ const fetchClassroomPage = async () => {
 
 const handleSearch = () => {
   pagination.pageNum = 1
-  fetchClassroomPage()
+  fetchTeacherPage()
 }
 
 const handleReset = () => {
-  searchForm.classroomName = ''
-  searchForm.classroomType = ''
+  searchForm.teacherName = ''
+  searchForm.teacherDepartment = ''
   pagination.pageNum = 1
-  fetchClassroomPage()
+  fetchTeacherPage()
 }
 
 const handleSizeChange = (size) => {
   pagination.pageSize = size
   pagination.pageNum = 1
-  fetchClassroomPage()
+  fetchTeacherPage()
 }
 
 const handleCurrentChange = (page) => {
   pagination.pageNum = page
-  fetchClassroomPage()
+  fetchTeacherPage()
 }
 
 const resetDialogForm = () => {
-  dialogForm.classroomId = null
-  dialogForm.classroomName = ''
-  dialogForm.classroomType = ''
-  dialogForm.classroomCap = null
-  dialogForm.classroomState = ''
+  dialogForm.teacherId = null
+  dialogForm.teacherName = ''
+  dialogForm.teacherDepartment = ''
   if (dialogFormRef.value) {
     dialogFormRef.value.clearValidate()
   }
@@ -303,11 +255,9 @@ const handleOpenAddDialog = () => {
 const handleOpenEditDialog = (row) => {
   if (!row) return
   isEdit.value = true
-  dialogForm.classroomId = row.classroomId
-  dialogForm.classroomName = row.classroomName
-  dialogForm.classroomType = row.classroomType
-  dialogForm.classroomCap = row.classroomCap
-  dialogForm.classroomState = row.classroomState
+  dialogForm.teacherId = row.teacherId
+  dialogForm.teacherName = row.teacherName
+  dialogForm.teacherDepartment = row.teacherDepartment
   if (dialogFormRef.value) {
     dialogFormRef.value.clearValidate()
   }
@@ -321,34 +271,31 @@ const handleSubmit = () => {
     dialogSubmitting.value = true
     try {
       const payload = {
-        classroomId: dialogForm.classroomId,
-        classroomName: dialogForm.classroomName,
-        classroomType: dialogForm.classroomType,
-        classroomCap: dialogForm.classroomCap,
-        classroomState: dialogForm.classroomState
+        teacherId: dialogForm.teacherId,
+        teacherName: dialogForm.teacherName,
+        teacherDepartment: dialogForm.teacherDepartment
       }
 
       let res
       if (isEdit.value) {
-        res = await updateClassroom(payload)
+        res = await updateTeacher(payload)
       } else {
-        res = await addClassroom(payload)
+        res = await addTeacher(payload)
       }
       const { data } = res
 
       if (data && data.code === 1) {
-        ElMessage.success(isEdit.value ? '更新教室成功' : '新增教室成功')
+        ElMessage.success(isEdit.value ? '更新教师成功' : '新增教师成功')
         dialogVisible.value = false
-        // 新增后回到第一页，编辑后停留在当前页
         if (!isEdit.value) {
           pagination.pageNum = 1
         }
-        fetchClassroomPage()
+        fetchTeacherPage()
       } else {
-        ElMessage.error(data?.msg || (isEdit.value ? '更新教室失败' : '新增教室失败'))
+        ElMessage.error(data?.msg || (isEdit.value ? '更新教师失败' : '新增教师失败'))
       }
     } catch (error) {
-      ElMessage.error(isEdit.value ? '请求更新教室失败' : '请求新增教室失败')
+      ElMessage.error(isEdit.value ? '请求更新教师失败' : '请求新增教师失败')
     } finally {
       dialogSubmitting.value = false
     }
@@ -356,15 +303,15 @@ const handleSubmit = () => {
 }
 
 const handleDelete = async (row) => {
-  if (!row || !row.classroomId) return
+  if (!row || !row.teacherId) return
   try {
-    const { data } = await deleteClassroom(row.classroomId)
+    const { data } = await deleteTeacher(row.teacherId)
     if (data && data.code === 1) {
       ElMessage.success('删除成功')
       if (tableData.value.length === 1 && pagination.pageNum > 1) {
         pagination.pageNum -= 1
       }
-      fetchClassroomPage()
+      fetchTeacherPage()
     } else {
       ElMessage.error(data?.msg || '删除失败')
     }
@@ -374,7 +321,7 @@ const handleDelete = async (row) => {
 }
 
 onMounted(() => {
-  fetchClassroomPage()
+  fetchTeacherPage()
 })
 </script>
 
