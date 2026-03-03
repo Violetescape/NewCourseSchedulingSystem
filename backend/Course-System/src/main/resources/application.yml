@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/courseschedulingsystemdatabase
+    username: root
+    password: 123456
+
+# MyBatis 配置（如果你使用 MyBatis-Plus，可以将 mybatis 替换为 mybatis-plus）
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

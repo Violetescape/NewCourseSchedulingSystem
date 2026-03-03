@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="violet.mapper.TeacherMapper">
+
+    <!-- 条件分页查询教师列表：支持姓名模糊搜索、院系精确过滤 -->
+    <select id="findByCondition" resultType="violet.pojo.Teacher">
+        select
+            Teacher_ID as teacherId,
+            Teacher_Name as teacherName,
+            Teacher_Department as teacherDepartment,
+            Teacher_Title as teacherTitle,
+            Teacher_Status as teacherStatus
+        from teacher
+        <where>
+            <if test="teacherName != null and teacherName != ''">
+                and Teacher_Name like concat('%', #{teacherName}, '%')
+            </if>
+            <if test="teacherDepartment != null and teacherDepartment != ''">
+                and Teacher_Department = #{teacherDepartment}
+            </if>
+        </where>
+        order by Teacher_ID
+        limit #{offset}, #{pageSize}
+    </select>
+
+    <!-- 条件查询总记录数 -->
+    <select id="countByCondition" resultType="long">
+        select count(*)
+        from teacher
+        <where>
+            <if test="teacherName != null and teacherName != ''">
+                and Teacher_Name like concat('%', #{teacherName}, '%')
+            </if>
+            <if test="teacherDepartment != null and teacherDepartment != ''">
+                and Teacher_Department = #{teacherDepartment}
+            </if>
+        </where>
+    </select>
+
+</mapper>
+

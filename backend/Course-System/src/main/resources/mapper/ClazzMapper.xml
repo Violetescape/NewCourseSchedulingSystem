@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="violet.mapper.ClazzMapper">
+
+    <!-- 条件分页查询班级列表 -->
+    <select id="findByCondition" resultType="violet.pojo.Clazz">
+        select
+            Class_ID as classId,
+            Class_Name as className,
+            Class_Major as classMajor,
+            Class_Grade as classGrade,
+            Class_Num as classNum,
+            Class_Department as classDepartment
+        from class
+        <where>
+            <!-- 年级精确匹配 -->
+            <if test="classGrade != null">
+                and Class_Grade = #{classGrade}
+            </if>
+            <!-- 学院精确匹配 -->
+            <if test="classDepartment != null and classDepartment != ''">
+                and Class_Department like concat('%', #{classDepartment}, '%')
+            </if>
+            <!-- 专业模糊查询 -->
+            <if test="classMajor != null and classMajor != ''">
+                and Class_Major like concat('%', #{classMajor}, '%')
+            </if>
+        </where>
+        order by Class_ID
+        limit #{offset}, #{pageSize}
+    </select>
+
+    <!-- 条件查询总记录数 -->
+    <select id="countByCondition" resultType="long">
+        select count(*)
+        from class
+        <where>
+            <if test="classGrade != null">
+                and Class_Grade = #{classGrade}
+            </if>
+            <if test="classDepartment != null and classDepartment != ''">
+                and Class_Department = #{classDepartment}
+            </if>
+            <if test="classMajor != null and classMajor != ''">
+                and Class_Major like concat('%', #{classMajor}, '%')
+            </if>
+        </where>
+    </select>
+
+</mapper>
+

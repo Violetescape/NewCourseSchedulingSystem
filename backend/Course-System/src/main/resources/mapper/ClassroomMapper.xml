@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="violet.mapper.ClassroomMapper">
+
+    <!-- 条件分页查询教室列表：支持名称模糊搜索、类型过滤 -->
+    <select id="findByCondition" resultType="violet.pojo.Classroom">
+        select
+            Classroom_ID as classroomId,
+            Classroom_Type as classroomType,
+            Classroom_Cap as classroomCap,
+            Classroom_State as classroomState,
+            Classroom_Name as classroomName
+        from classroom
+        <where>
+            <if test="classroomName != null and classroomName != ''">
+                and Classroom_Name like concat('%', #{classroomName}, '%')
+            </if>
+            <if test="classroomType != null and classroomType != ''">
+                and Classroom_Type = #{classroomType}
+            </if>
+        </where>
+        order by Classroom_ID
+        limit #{offset}, #{pageSize}
+    </select>
+
+    <!-- 条件查询总记录数 -->
+    <select id="countByCondition" resultType="long">
+        select count(*)
+        from classroom
+        <where>
+            <if test="classroomName != null and classroomName != ''">
+                and Classroom_Name like concat('%', #{classroomName}, '%')
+            </if>
+            <if test="classroomType != null and classroomType != ''">
+                and Classroom_Type = #{classroomType}
+            </if>
+        </where>
+    </select>
+
+</mapper>
+
