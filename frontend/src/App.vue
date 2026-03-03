@@ -47,6 +47,7 @@
         <ClassManage v-else-if="activeMenu === 'classes'" />
         <TeacherManage v-else-if="activeMenu === 'teachers'" />
         <ClassroomManage v-else-if="activeMenu === 'rooms'" />
+        <CourseManage v-else-if="activeMenu === 'courses'" />
         <div v-else class="placeholder-page">
           <el-empty
             :description="`功能页面「${currentPageTitle}」占位，后续可接入实际组件或路由。`"
@@ -72,6 +73,7 @@ import Home from './views/Home.vue'
 import ClassManage from './views/ClassManage.vue'
 import ClassroomManage from './views/ClassroomManage.vue'
 import TeacherManage from './views/TeacherManage.vue'
+import CourseManage from './views/CourseManage.vue'
 
 const menuItems = [
   { key: 'home', label: '首页', icon: House },
