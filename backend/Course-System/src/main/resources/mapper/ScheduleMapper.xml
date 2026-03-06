@@ -19,21 +19,22 @@
             cr.Classroom_Name as classroomName,
             s.Schedule_Weekday as weekday,
             s.Schedule_Section as section,
-            s.Schedule_Week as week
+            s.Schedule_Week as week,
+            c.Course_SingleHour as courseSingleHour
         from schedule s
-        left join class cl on s.Class_ID = cl.Class_ID
-        left join teacher t on s.Teacher_ID = t.Teacher_ID
-        left join course c on s.Course_ID = c.Course_ID
-        left join classroom cr on s.Classroom_ID = cr.Classroom_ID
+        left join class cl on s.Schedule_Class_ID = cl.Class_ID
+        left join teacher t on s.Schedule_Teacher_ID = t.Teacher_ID
+        left join course c on s.Schedule_Course_ID = c.Course_ID
+        left join classroom cr on s.Schedule_Classroom_ID = cr.Classroom_ID
         <where>
             <if test="week != null">
-                and s.Schedule_Week = #{week}
+                and #{week} between c.Course_StartWeek and c.Course_EndWeek
             </if>
             <if test="classId != null">
-                and s.Class_ID = #{classId}
+                and s.Schedule_Class_ID = #{classId}
             </if>
             <if test="teacherId != null">
-                and s.Teacher_ID = #{teacherId}
+                and s.Schedule_Teacher_ID = #{teacherId}
             </if>
         </where>
         order by s.Schedule_Weekday, s.Schedule_Section, s.Schedule_ID

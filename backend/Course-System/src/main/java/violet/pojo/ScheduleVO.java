@@ -43,7 +43,7 @@ public class ScheduleVO {
     private Integer weekday;
 
     /**
-     * 第几节课（如 1 代表 1-2 节）
+     * 起始课程
      */
     private Integer section;
 
@@ -51,5 +51,10 @@ public class ScheduleVO {
      * 第几周
      */
     private Integer week;
+
+    /**
+     * 单次授课课时数（用于课表前端的跨行合并）
+     */
+    private Integer courseSingleHour;
 }
 

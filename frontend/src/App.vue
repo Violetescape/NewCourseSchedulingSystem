@@ -52,6 +52,7 @@
         <ClassroomManage v-else-if="activeMenu === 'rooms'" />
         <CourseManage v-else-if="activeMenu === 'courses'" />
         <TeachingTaskManage v-else-if="activeMenu === 'teaching-tasks'" />
+        <ScheduleView v-else-if="activeMenu === 'schedule-view'" />
         <div v-else class="placeholder-page">
           <el-empty
             :description="`功能页面「${currentPageTitle}」占位，后续可接入实际组件或路由。`"
@@ -80,6 +81,7 @@ import TeacherManage from './views/TeacherManage.vue'
 import CourseManage from './views/CourseManage.vue'
 import TeachingTaskManage from './views/TeachingTaskManage.vue'
 import TeacherUnavailableManage from './views/TeacherUnavailableManage.vue'
+import ScheduleView from './views/ScheduleView.vue'
 
 const menuItems = [
   { key: 'home', label: '首页', icon: House },
@@ -89,6 +91,7 @@ const menuItems = [
   { key: 'rooms', label: '教室管理', icon: OfficeBuilding },
   { key: 'courses', label: '课程管理', icon: Notebook },
   { key: 'teaching-tasks', label: '教学任务管理', icon: Operation },
+  { key: 'schedule-view', label: '课表可视化', icon: DataAnalysis },
   { key: 'auto-schedule', label: '自动排课', icon: Operation },
   { key: 'analytics', label: '效能分析', icon: DataAnalysis }
 ]
