@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="violet.mapper.ScheduleMapper">
+
+    <!--
+        按周查询课表：
+        LEFT JOIN schedule, class, teacher, course, classroom 五张表
+        返回 ScheduleVO
+     -->
+    <select id="findScheduleList" resultType="violet.pojo.ScheduleVO">
+        select
+            s.Schedule_ID as scheduleId,
+            cl.Class_Name as className,
+            t.Teacher_Name as teacherName,
+            c.Course_Name as courseName,
+            cr.Classroom_Name as classroomName,
+            s.Schedule_Weekday as weekday,
+            s.Schedule_Section as section,
+            s.Schedule_Week as week
+        from schedule s
+        left join class cl on s.Class_ID = cl.Class_ID
+        left join teacher t on s.Teacher_ID = t.Teacher_ID
+        left join course c on s.Course_ID = c.Course_ID
+        left join classroom cr on s.Classroom_ID = cr.Classroom_ID
+        <where>
+            <if test="week != null">
+                and s.Schedule_Week = #{week}
+            </if>
+            <if test="classId != null">
+                and s.Class_ID = #{classId}
+            </if>
+            <if test="teacherId != null">
+                and s.Teacher_ID = #{teacherId}
+            </if>
+        </where>
+        order by s.Schedule_Weekday, s.Schedule_Section, s.Schedule_ID
+    </select>
+
+</mapper>
+

@@ -30,14 +30,6 @@ public class Teacher {
      */
     private String teacherDepartment;
 
-    /**
-     * 职称（如：讲师/副教授/教授）
-     */
-    private String teacherTitle;
-
-    /**
-     * 状态（如：在职/离职/停用）
-     */
-    private String teacherStatus;
+    // 当前数据库中未维护职称和状态字段，如后续需要再扩展。
 }
 

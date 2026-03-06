@@ -45,15 +45,14 @@ public interface TeacherMapper {
     /**
      * 新增教师（手动传入 teacherId）。
      */
-    @Insert("insert into teacher(Teacher_ID, Teacher_Name, Teacher_Department, Teacher_Title, Teacher_Status) " +
-            "values(#{teacherId}, #{teacherName}, #{teacherDepartment}, #{teacherTitle}, #{teacherStatus})")
+    @Insert("insert into teacher(Teacher_ID, Teacher_Name, Teacher_Department) " +
+            "values(#{teacherId}, #{teacherName}, #{teacherDepartment})")
     void add(Teacher teacher);
 
     /**
      * 修改教师信息。
      */
-    @Update("update teacher set Teacher_Name = #{teacherName}, Teacher_Department = #{teacherDepartment}, " +
-            "Teacher_Title = #{teacherTitle}, Teacher_Status = #{teacherStatus} " +
+    @Update("update teacher set Teacher_Name = #{teacherName}, Teacher_Department = #{teacherDepartment} " +
             "where Teacher_ID = #{teacherId}")
     void update(Teacher teacher);
 

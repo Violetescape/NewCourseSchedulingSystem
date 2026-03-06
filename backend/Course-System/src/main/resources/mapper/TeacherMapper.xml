@@ -10,9 +10,7 @@
         select
             Teacher_ID as teacherId,
             Teacher_Name as teacherName,
-            Teacher_Department as teacherDepartment,
-            Teacher_Title as teacherTitle,
-            Teacher_Status as teacherStatus
+            Teacher_Department as teacherDepartment
         from teacher
         <where>
             <if test="teacherName != null and teacherName != ''">

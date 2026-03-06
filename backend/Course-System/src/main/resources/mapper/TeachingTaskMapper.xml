@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="violet.mapper.TeachingTaskMapper">
+
+    <!--
+        条件分页查询教学任务列表：
+        - 主表：teaching_task t
+        - 关联：teacher te, course c, class cl
+        - 映射到：violet.pojo.TeachingTaskVO
+     -->
+    <select id="findByCondition" resultType="violet.pojo.TeachingTaskVO">
+        select
+            t.Task_ID    as taskId,
+            t.Teacher_ID as teacherId,
+            t.Course_ID  as courseId,
+            t.Class_ID   as classId,
+            t.Task_State as taskState,
+            te.Teacher_Name as teacherName,
+            c.Course_Name  as courseName,
+            cl.Class_Name  as className
+        from teaching_task t
+        left join teacher te on t.Teacher_ID = te.Teacher_ID
+        left join course c   on t.Course_ID  = c.Course_ID
+        left join class cl   on t.Class_ID   = cl.Class_ID
+        <where>
+            <if test="teacherId != null">
+                and t.Teacher_ID = #{teacherId}
+            </if>
+            <if test="courseId != null">
+                and t.Course_ID = #{courseId}
+            </if>
+            <if test="classId != null">
+                and t.Class_ID = #{classId}
+            </if>
+            <if test="taskState != null and taskState != ''">
+                and t.Task_State = #{taskState}
+            </if>
+        </where>
+        order by t.Task_ID
+        limit #{offset}, #{pageSize}
+    </select>
+
+    <!-- 条件查询总记录数（与分页查询保持相同过滤条件） -->
+    <select id="countByCondition" resultType="long">
+        select count(*)
+        from teaching_task t
+        <where>
+            <if test="teacherId != null">
+                and t.Teacher_ID = #{teacherId}
+            </if>
+            <if test="courseId != null">
+                and t.Course_ID = #{courseId}
+            </if>
+            <if test="classId != null">
+                and t.Class_ID = #{classId}
+            </if>
+            <if test="taskState != null and taskState != ''">
+                and t.Task_State = #{taskState}
+            </if>
+        </where>
+    </select>
+
+</mapper>
+

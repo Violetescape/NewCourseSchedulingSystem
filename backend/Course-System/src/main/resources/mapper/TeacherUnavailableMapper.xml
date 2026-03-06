@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="violet.mapper.TeacherUnavailableMapper">
+
+    <!--
+        条件分页查询教师不可排课时间列表：
+        - 主表：teacher_unavailable tu
+        - 关联：teacher te
+        - 映射到：violet.pojo.TeacherUnavailableVO
+     -->
+    <select id="findByCondition" resultType="violet.pojo.TeacherUnavailableVO">
+        select
+            tu.Un_ID      as unId,
+            tu.Teacher_ID as teacherId,
+            tu.Un_Week    as unWeek,
+            tu.Un_Weekday as unWeekday,
+            tu.Un_Section as unSection,
+            tu.Un_Remark  as unRemark,
+            te.Teacher_Name as teacherName
+        from teacher_unavailable tu
+        left join teacher te on tu.Teacher_ID = te.Teacher_ID
+        <where>
+            <if test="teacherId != null">
+                and tu.Teacher_ID = #{teacherId}
+            </if>
+            <if test="unWeekday != null">
+                and tu.Un_Weekday = #{unWeekday}
+            </if>
+        </where>
+        order by tu.Un_ID
+        limit #{offset}, #{pageSize}
+    </select>
+
+    <!-- 条件查询总记录数 -->
+    <select id="countByCondition" resultType="long">
+        select count(*)
+        from teacher_unavailable tu
+        <where>
+            <if test="teacherId != null">
+                and tu.Teacher_ID = #{teacherId}
+            </if>
+            <if test="unWeekday != null">
+                and tu.Un_Weekday = #{unWeekday}
+            </if>
+        </where>
+    </select>
+
+</mapper>
+

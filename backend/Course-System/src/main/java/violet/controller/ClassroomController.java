@@ -18,10 +18,10 @@ import violet.service.ClassroomService;
  * 教室相关接口。
  * <p>
  * RESTful 风格：
- * - GET    /api/classrooms        分页查询（支持按名称模糊搜索、按类型过滤）
- * - POST   /api/classrooms        新增教室
- * - PUT    /api/classrooms        修改教室信息（包括状态更新）
- * - DELETE /api/classrooms/{id}   根据 ID 删除教室
+ * - GET    /classrooms        分页查询（支持按名称模糊搜索、按类型过滤）
+ * - POST   /classrooms        新增教室
+ * - PUT    /classrooms        修改教室信息（包括状态更新）
+ * - DELETE /classrooms/{id}   根据 ID 删除教室
  * </p>
  */
 @RestController

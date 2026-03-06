@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="violet.mapper.CourseMapper">
+
+    <!-- 条件分页查询课程列表：支持名称模糊搜索、类型过滤 -->
+    <select id="findByCondition" resultType="violet.pojo.Course">
+        select
+            Course_ID         as courseId,
+            Course_Name       as courseName,
+            Course_Type       as courseType,
+            Course_StartWeek  as courseStartWeek,
+            Course_EndWeek    as courseEndWeek,
+            Course_SingleHour as courseSingleHour
+        from course
+        <where>
+            <if test="courseName != null and courseName != ''">
+                and Course_Name like concat('%', #{courseName}, '%')
+            </if>
+            <if test="courseType != null">
+                and Course_Type = #{courseType}
+            </if>
+        </where>
+        order by Course_ID
+        limit #{offset}, #{pageSize}
+    </select>
+
+    <!-- 条件查询总记录数 -->
+    <select id="countByCondition" resultType="long">
+        select count(*)
+        from course
+        <where>
+            <if test="courseName != null and courseName != ''">
+                and Course_Name like concat('%', #{courseName}, '%')
+            </if>
+            <if test="courseType != null">
+                and Course_Type = #{courseType}
+            </if>
+        </where>
+    </select>
+
+</mapper>
+

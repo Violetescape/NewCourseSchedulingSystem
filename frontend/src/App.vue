@@ -46,6 +46,9 @@
         <Home v-if="activeMenu === 'home'" />
         <ClassManage v-else-if="activeMenu === 'classes'" />
         <TeacherManage v-else-if="activeMenu === 'teachers'" />
+        <TeacherUnavailableManage
+          v-else-if="activeMenu === 'teacher-unavailable'"
+        />
         <ClassroomManage v-else-if="activeMenu === 'rooms'" />
         <CourseManage v-else-if="activeMenu === 'courses'" />
         <TeachingTaskManage v-else-if="activeMenu === 'teaching-tasks'" />
@@ -76,11 +79,13 @@ import ClassroomManage from './views/ClassroomManage.vue'
 import TeacherManage from './views/TeacherManage.vue'
 import CourseManage from './views/CourseManage.vue'
 import TeachingTaskManage from './views/TeachingTaskManage.vue'
+import TeacherUnavailableManage from './views/TeacherUnavailableManage.vue'
 
 const menuItems = [
   { key: 'home', label: '首页', icon: House },
   { key: 'classes', label: '班级管理', icon: Collection },
   { key: 'teachers', label: '教师管理', icon: User },
+  { key: 'teacher-unavailable', label: '教师限排时间', icon: User },
   { key: 'rooms', label: '教室管理', icon: OfficeBuilding },
   { key: 'courses', label: '课程管理', icon: Notebook },
   { key: 'teaching-tasks', label: '教学任务管理', icon: Operation },

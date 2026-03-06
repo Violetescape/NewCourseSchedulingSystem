@@ -17,10 +17,10 @@ import violet.service.TeacherService;
 /**
  * 教师相关接口（RESTful）。
  * <p>
- * - GET    /api/teachers        分页查询（支持按姓名模糊、按院系过滤）
- * - POST   /api/teachers        新增教师（ID 手动传入）
- * - PUT    /api/teachers        修改教师
- * - DELETE /api/teachers/{id}   根据 ID 删除教师
+ * - GET    /teachers        分页查询（支持按姓名模糊、按院系过滤）
+ * - POST   /teachers        新增教师（ID 手动传入）
+ * - PUT    /teachers        修改教师
+ * - DELETE /teachers/{id}   根据 ID 删除教师
  * </p>
  */
 @RestController
@@ -29,7 +29,7 @@ public class TeacherController {
     @Autowired
     private TeacherService teacherService;
 
-    @GetMapping("/api/teachers")
+    @GetMapping("/teachers")
     public Result page(@RequestParam(defaultValue = "1") Integer pageNum,
                        @RequestParam(defaultValue = "10") Integer pageSize,
                        @RequestParam(required = false) String teacherName,
@@ -43,21 +43,21 @@ public class TeacherController {
         return Result.success(pageResult);
     }
 
-    @PostMapping("/api/teachers")
+    @PostMapping("/teachers")
     public Result add(@RequestBody Teacher teacher) {
         System.out.println("新增教师：" + teacher);
         teacherService.add(teacher);
         return Result.success();
     }
 
-    @PutMapping("/api/teachers")
+    @PutMapping("/teachers")
     public Result update(@RequestBody Teacher teacher) {
         System.out.println("修改教师：" + teacher);
         teacherService.update(teacher);
         return Result.success();
     }
 
-    @DeleteMapping("/api/teachers/{id}")
+    @DeleteMapping("/teachers/{id}")
     public Result delete(@PathVariable("id") Integer id) {
         System.out.println("删除教师 id=" + id);
         teacherService.deleteById(id);
