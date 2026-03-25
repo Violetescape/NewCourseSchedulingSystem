@@ -2,6 +2,7 @@ package violet.mapper;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
@@ -63,5 +64,13 @@ public interface CourseMapper {
      */
     @Delete("delete from course where Course_ID = #{courseId}")
     void deleteById(Integer courseId);
+
+    /**
+     * 根据 ID 查询课程。
+     */
+    @Select("select Course_ID as courseId, Course_Name as courseName, Course_Type as courseType, " +
+            "Course_StartWeek as courseStartWeek, Course_EndWeek as courseEndWeek, " +
+            "Course_SingleHour as courseSingleHour from course where Course_ID = #{courseId}")
+    Course findById(Integer courseId);
 }
 

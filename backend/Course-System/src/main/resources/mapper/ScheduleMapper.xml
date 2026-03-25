@@ -20,7 +20,11 @@
             s.Schedule_Weekday as weekday,
             s.Schedule_Section as section,
             s.Schedule_Week as week,
-            c.Course_SingleHour as courseSingleHour
+            c.Course_SingleHour as courseSingleHour,
+            c.Course_StartWeek as courseStartWeek,
+            c.Course_EndWeek as courseEndWeek,
+            s.Schedule_Course_ID as scheduleCourseId,
+            s.Schedule_Classroom_ID as scheduleClassroomId
         from schedule s
         left join class cl on s.Schedule_Class_ID = cl.Class_ID
         left join teacher t on s.Schedule_Teacher_ID = t.Teacher_ID
@@ -36,8 +40,25 @@
             <if test="teacherId != null">
                 and s.Schedule_Teacher_ID = #{teacherId}
             </if>
+            <if test="classroomId != null">
+                and s.Schedule_Classroom_ID = #{classroomId}
+            </if>
         </where>
         order by s.Schedule_Weekday, s.Schedule_Section, s.Schedule_ID
+    </select>
+
+    <!-- 查询所有排课原始记录（用于冲突检测模型初始化），关联 course 获取 courseSingleHour -->
+    <select id="findAllRawForConflict" resultType="violet.pojo.ScheduleRawDTO">
+        select
+            s.Schedule_Teacher_ID as teacherId,
+            s.Schedule_Class_ID as classId,
+            s.Schedule_Classroom_ID as classroomId,
+            s.Schedule_Weekday as weekday,
+            s.Schedule_Section as section,
+            s.Schedule_Week as week,
+            coalesce(c.Course_SingleHour, 1) as courseSingleHour
+        from schedule s
+        left join course c on s.Schedule_Course_ID = c.Course_ID
     </select>
 
 </mapper>

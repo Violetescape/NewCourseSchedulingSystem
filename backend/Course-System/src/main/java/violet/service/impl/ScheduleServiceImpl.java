@@ -19,12 +19,17 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public List<ScheduleVO> listByClass(Integer classId, Integer week) {
-        return scheduleMapper.findScheduleList(week, classId, null);
+        return scheduleMapper.findScheduleList(week, classId, null, null);
     }
 
     @Override
     public List<ScheduleVO> listByTeacher(Integer teacherId, Integer week) {
-        return scheduleMapper.findScheduleList(week, null, teacherId);
+        return scheduleMapper.findScheduleList(week, null, teacherId, null);
+    }
+
+    @Override
+    public List<ScheduleVO> listByClassroom(Integer classroomId, Integer week) {
+        return scheduleMapper.findScheduleList(week, null, null, classroomId);
     }
 }
 

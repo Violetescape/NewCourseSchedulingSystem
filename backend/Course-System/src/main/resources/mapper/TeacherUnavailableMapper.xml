@@ -48,5 +48,12 @@
         </where>
     </select>
 
+    <!-- 查询所有教师不可排课记录（用于冲突模型初始化） -->
+    <select id="findAll" resultType="violet.pojo.TeacherUnavailable">
+        select Un_ID as unId, Teacher_ID as teacherId, Un_Week as unWeek,
+               Un_Weekday as unWeekday, Un_Section as unSection, Un_Remark as unRemark
+        from teacher_unavailable
+    </select>
+
 </mapper>
 

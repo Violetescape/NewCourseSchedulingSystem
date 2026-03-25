@@ -21,6 +21,14 @@ public interface ClazzMapper {
             "from class order by Class_ID")
     List<Clazz> findAll();
 
+    /**
+     * 根据 ID 查询班级。
+     */
+    @Select("select Class_ID as classId, Class_Name as className, Class_Major as classMajor, " +
+            "Class_Grade as classGrade, Class_Num as classNum, Class_Department as classDepartment " +
+            "from class where Class_ID = #{classId}")
+    Clazz findById(Integer classId);
+
 
     //  根据Id删除班级
     @Delete("delete from class where Class_ID = #{classId}")

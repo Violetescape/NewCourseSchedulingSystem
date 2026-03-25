@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+//第一个是提供get set方法，第二个是有参构造，第三个是无参构造
 public class Classroom {
 
     /**

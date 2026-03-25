@@ -56,5 +56,25 @@ public class ScheduleVO {
      * 单次授课课时数（用于课表前端的跨行合并）
      */
     private Integer courseSingleHour;
+
+    /**
+     * 课程起始周（来自 course 表）
+     */
+    private Integer courseStartWeek;
+
+    /**
+     * 课程结束周（来自 course 表）
+     */
+    private Integer courseEndWeek;
+
+    /**
+     * 课程 ID（用于前端聚合去重）
+     */
+    private Integer scheduleCourseId;
+
+    /**
+     * 教室 ID（用于前端聚合去重）
+     */
+    private Integer scheduleClassroomId;
 }
 

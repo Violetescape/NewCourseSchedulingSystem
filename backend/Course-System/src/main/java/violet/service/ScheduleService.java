@@ -18,5 +18,10 @@ public interface ScheduleService {
      * 按教师查询课表（按周过滤）。
      */
     List<ScheduleVO> listByTeacher(Integer teacherId, Integer week);
+
+    /**
+     * 按教室查询课表（按周过滤，week 为 null 则不过滤周次）。
+     */
+    List<ScheduleVO> listByClassroom(Integer classroomId, Integer week);
 }
 

@@ -40,5 +40,17 @@
         </where>
     </select>
 
+    <!-- 查询所有教室，按容量升序排列（Best-Fit 最佳适应排序） -->
+    <select id="findAllOrderByCapacityAsc" resultType="violet.pojo.Classroom">
+        select
+            Classroom_ID as classroomId,
+            Classroom_Type as classroomType,
+            Classroom_Cap as classroomCap,
+            Classroom_State as classroomState,
+            Classroom_Name as classroomName
+        from classroom
+        order by Classroom_Cap asc
+    </select>
+
 </mapper>
 

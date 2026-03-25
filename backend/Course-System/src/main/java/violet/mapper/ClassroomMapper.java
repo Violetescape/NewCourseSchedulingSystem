@@ -68,5 +68,12 @@ public interface ClassroomMapper {
      */
     @Delete("delete from classroom where Classroom_ID = #{classroomId}")
     void deleteById(Integer classroomId);
+
+    /**
+     * 查询所有教室，按容量升序排列（最佳适应 Best-Fit：小课配小屋）。
+     *
+     * @return 教室列表
+     */
+    List<Classroom> findAllOrderByCapacityAsc();
 }
 

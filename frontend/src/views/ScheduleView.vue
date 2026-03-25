@@ -130,6 +130,12 @@
                         }}
                       </span>
                     </div>
+                    <div
+                      v-if="getCourseWeeksText(getCell(sec.value - 1, day.value - 1))"
+                      class="course-weeks"
+                    >
+                      [第 {{ getCourseWeeksText(getCell(sec.value - 1, day.value - 1)) }} 周]
+                    </div>
                   </div>
                   <div v-else class="cell-empty">—</div>
                 </td>
@@ -179,6 +185,12 @@
                         }}
                       </span>
                     </div>
+                    <div
+                      v-if="getCourseWeeksText(getCell(sec.value - 1, day.value - 1))"
+                      class="course-weeks"
+                    >
+                      [第 {{ getCourseWeeksText(getCell(sec.value - 1, day.value - 1)) }} 周]
+                    </div>
                   </div>
                   <div v-else class="cell-empty">—</div>
                 </td>
@@ -227,6 +239,12 @@
                           getCell(sec.value - 1, day.value - 1).className || '-'
                         }}
                       </span>
+                    </div>
+                    <div
+                      v-if="getCourseWeeksText(getCell(sec.value - 1, day.value - 1))"
+                      class="course-weeks"
+                    >
+                      [第 {{ getCourseWeeksText(getCell(sec.value - 1, day.value - 1)) }} 周]
                     </div>
                   </div>
                   <div v-else class="cell-empty">—</div>
@@ -345,6 +363,17 @@ const getCell = (row, col) => {
   return r[col] || null
 }
 
+/** 获取周次显示文本，优先 courseStartWeek/courseEndWeek，支持 StartWeek/EndWeek */
+function getCourseWeeksText(item) {
+  if (!item || item.skip) return ''
+  const s = item.courseStartWeek ?? item.StartWeek
+  const e = item.courseEndWeek ?? item.EndWeek
+  if (s != null && e != null) return `${s}-${e}`
+  if (s != null) return String(s)
+  if (e != null) return String(e)
+  return ''
+}
+
 const handleQuery = async () => {
   if (queryForm.mode === 'class' && !queryForm.classId) {
     ElMessage.warning('请选择班级')
@@ -433,6 +462,12 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
+}
+
+.toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .title-block h2 {
@@ -543,6 +578,18 @@ onMounted(() => {
 .cell-meta {
   font-size: 12px;
   color: #94a3b8;
+}
+
+.course-weeks,
+.cell-week {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 4px;
+  opacity: 0.9;
+}
+
+.course-weeks {
+  display: block;
 }
 
 .cell-empty {

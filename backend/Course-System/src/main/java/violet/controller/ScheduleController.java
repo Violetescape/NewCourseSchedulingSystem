@@ -41,8 +41,17 @@ public class ScheduleController {
     @GetMapping("/schedules/teacher/{teacherId}")
     public Result listByTeacher(@PathVariable("teacherId") Integer teacherId,
                                 @RequestParam(required = false) Integer week) {
-        System.out.println("按教师查询课表 teacherId=" + teacherId + ", week=" + week);
         List<ScheduleVO> list = scheduleService.listByTeacher(teacherId, week);
+        return Result.success(list);
+    }
+
+    /**
+     * 按教室查询课表（week 不传或为 null 则返回全量，用于全局聚合课表）。
+     */
+    @GetMapping("/schedules/classroom/{classroomId}")
+    public Result listByClassroom(@PathVariable("classroomId") Integer classroomId,
+                                  @RequestParam(required = false) Integer week) {
+        List<ScheduleVO> list = scheduleService.listByClassroom(classroomId, week);
         return Result.success(list);
     }
 }

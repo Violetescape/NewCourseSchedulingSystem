@@ -64,5 +64,12 @@ public interface TeacherUnavailableMapper {
      */
     @Delete("delete from teacher_unavailable where Un_ID = #{unId}")
     void deleteById(Integer unId);
+
+    /**
+     * 查询所有教师不可排课记录（用于冲突检测模型初始化）。
+     *
+     * @return 教师不可排课记录列表
+     */
+    List<TeacherUnavailable> findAll();
 }
 
