@@ -4,25 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9c67d888-9ee1-4abf-9663-b187d4cecc1e" name="Changes" comment="实现课表呈现">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+    <list default="true" id="9c67d888-9ee1-4abf-9663-b187d4cecc1e" name="Changes" comment="实现自动排课">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/controller/ScheduleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/controller/ScheduleController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/mapper/ClassroomMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/mapper/ClassroomMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/mapper/ClazzMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/mapper/ClazzMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/mapper/CourseMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/mapper/CourseMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/mapper/ScheduleMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/mapper/ScheduleMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/mapper/TeacherUnavailableMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/mapper/TeacherUnavailableMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/pojo/Classroom.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/pojo/Classroom.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/pojo/ScheduleVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/pojo/ScheduleVO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/ScheduleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/ScheduleService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/impl/ScheduleServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/impl/ScheduleServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/pojo/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/pojo/Course.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/impl/AutoSchedulingServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/impl/AutoSchedulingServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/resources/mapper/ClassroomMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/resources/mapper/ClassroomMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/resources/mapper/ScheduleMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/resources/mapper/ScheduleMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/resources/mapper/TeacherUnavailableMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/resources/mapper/TeacherUnavailableMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/api/schedule.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/schedule.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/ScheduleView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/ScheduleView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/resources/mapper/CourseMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/resources/mapper/CourseMapper.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +113,7 @@
       <workItem from="1774351636550" duration="2072000" />
       <workItem from="1774357646287" duration="849000" />
       <workItem from="1774417639645" duration="2033000" />
-      <workItem from="1774440710040" duration="7654000" />
+      <workItem from="1774440710040" duration="10805000" />
     </task>
     <task id="LOCAL-00001" summary="整合">
       <option name="closed" value="true" />
@@ -143,7 +131,23 @@
       <option name="project" value="LOCAL" />
       <updated>1772796590231</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="实现自动排课">
+      <option name="closed" value="true" />
+      <created>1774448735239</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1774448735239</updated>
+    </task>
+    <task id="LOCAL-00004" summary="实现自动排课">
+      <option name="closed" value="true" />
+      <created>1774448915115</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1774448915115</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -152,6 +156,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="整合" />
     <MESSAGE value="实现课表呈现" />
-    <option name="LAST_COMMIT_MESSAGE" value="实现课表呈现" />
+    <MESSAGE value="实现自动排课" />
+    <option name="LAST_COMMIT_MESSAGE" value="实现自动排课" />
   </component>
 </project>

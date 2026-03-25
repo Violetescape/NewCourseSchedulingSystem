@@ -235,6 +235,7 @@ public class AutoSchedulingServiceImpl implements AutoSchedulingService {
         int endWeek = course.getCourseEndWeek() != null ? course.getCourseEndWeek() : MAX_WEEK;
         int singleHour = course.getCourseSingleHour() != null ? Math.max(1, course.getCourseSingleHour()) : 1;
         int studentNum = clazz.getClassNum() != null ? clazz.getClassNum() : 0;
+        String reqRoomType = course.getRequiredClassroomType();
 
         // 时间搜索循环
         for (int weekday = MIN_WEEKDAY; weekday <= MAX_WEEKDAY; weekday++) {
@@ -249,6 +250,11 @@ public class AutoSchedulingServiceImpl implements AutoSchedulingService {
                 // 寻找教室
                 for (Classroom room : classroomsAsc) {
                     if (room.getClassroomCap() == null || room.getClassroomCap() < studentNum) {
+                        continue;
+                    }
+
+                    if (reqRoomType != null && room.getClassroomType() != null
+                            && !reqRoomType.equals(room.getClassroomType())) {
                         continue;
                     }
 

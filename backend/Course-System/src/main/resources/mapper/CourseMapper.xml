@@ -13,7 +13,8 @@
             Course_Type       as courseType,
             Course_StartWeek  as courseStartWeek,
             Course_EndWeek    as courseEndWeek,
-            Course_SingleHour as courseSingleHour
+            Course_SingleHour as courseSingleHour,
+            COALESCE(NULLIF(Required_Classroom_Type, ''), '普通教室') as requiredClassroomType
         from course
         <where>
             <if test="courseName != null and courseName != ''">

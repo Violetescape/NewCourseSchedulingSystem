@@ -46,8 +46,9 @@ public interface CourseMapper {
     /**
      * 新增课程（手动传入 courseId）。
      */
-    @Insert("insert into course(Course_ID, Course_Name, Course_Type, Course_StartWeek, Course_EndWeek, Course_SingleHour) " +
-            "values(#{courseId}, #{courseName}, #{courseType}, #{courseStartWeek}, #{courseEndWeek}, #{courseSingleHour})")
+    @Insert("insert into course(Course_ID, Course_Name, Course_Type, Course_StartWeek, Course_EndWeek, Course_SingleHour, Required_Classroom_Type) " +
+            "values(#{courseId}, #{courseName}, #{courseType}, #{courseStartWeek}, #{courseEndWeek}, #{courseSingleHour}, " +
+            "COALESCE(NULLIF(#{requiredClassroomType}, ''), '普通教室'))")
     void add(Course course);
 
     /**
@@ -55,7 +56,8 @@ public interface CourseMapper {
      */
     @Update("update course set Course_Name = #{courseName}, Course_Type = #{courseType}, " +
             "Course_StartWeek = #{courseStartWeek}, Course_EndWeek = #{courseEndWeek}, " +
-            "Course_SingleHour = #{courseSingleHour} " +
+            "Course_SingleHour = #{courseSingleHour}, " +
+            "Required_Classroom_Type = COALESCE(NULLIF(#{requiredClassroomType}, ''), '普通教室') " +
             "where Course_ID = #{courseId}")
     void update(Course course);
 
@@ -70,7 +72,8 @@ public interface CourseMapper {
      */
     @Select("select Course_ID as courseId, Course_Name as courseName, Course_Type as courseType, " +
             "Course_StartWeek as courseStartWeek, Course_EndWeek as courseEndWeek, " +
-            "Course_SingleHour as courseSingleHour from course where Course_ID = #{courseId}")
+            "Course_SingleHour as courseSingleHour, " +
+            "COALESCE(NULLIF(Required_Classroom_Type, ''), '普通教室') as requiredClassroomType from course where Course_ID = #{courseId}")
     Course findById(Integer courseId);
 }
 

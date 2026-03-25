@@ -44,5 +44,10 @@ public class Course {
      * 单次授课课时数
      */
     private Integer courseSingleHour;
+
+    /**
+     * 所需教室类型（例如：普通教室/计算机机房/实验室等）
+     */
+    private String requiredClassroomType;
 }
 

@@ -49,6 +49,7 @@
             Classroom_State as classroomState,
             Classroom_Name as classroomName
         from classroom
+        where Classroom_State = '可用'
         order by Classroom_Cap asc
     </select>
 
