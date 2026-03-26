@@ -106,24 +106,23 @@ const statCards = [
 /* 顶部欢迎区 */
 .hero {
   padding: 18px 20px;
-  border-radius: 18px;
-  background: radial-gradient(circle at top left, #1d4ed8 0, #020617 55%);
-  color: #e5e7eb;
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+  border-radius: 8px;
+  background: var(--el-color-primary-light-9);
+  color: var(--el-text-color-regular);
+  border: 1px solid var(--el-border-color-light);
 }
 
 .hero-text h1 {
   margin: 0 0 8px;
   font-size: 22px;
   font-weight: 600;
-  color: #f9fafb;
+  color: var(--el-color-primary);
 }
 
 .hero-text p {
   margin: 0;
   font-size: 14px;
-  color: #e5e7eb;
-  opacity: 0.9;
+  color: var(--el-text-color-regular);
 }
 
 /* 统计卡片区 */
@@ -132,11 +131,12 @@ const statCards = [
 }
 
 .stat-card {
-  border-radius: 16px;
-  background: rgba(15, 23, 42, 0.9);
-  border: 1px solid rgba(148, 163, 184, 0.35);
-  color: #e5e7eb;
+  border-radius: 8px;
+  background: var(--el-bg-color);
+  border: 1px solid var(--el-border-color-light);
+  color: var(--el-text-color-primary);
   padding: 14px 16px;
+  box-shadow: var(--el-box-shadow-light);
 }
 
 .stat-card-header {
@@ -148,7 +148,7 @@ const statCards = [
 
 .stat-label {
   font-size: 13px;
-  color: #9ca3af;
+  color: var(--el-text-color-secondary);
 }
 
 .stat-value-row {
@@ -161,7 +161,7 @@ const statCards = [
 .stat-value {
   font-size: 22px;
   font-weight: 600;
-  color: #f9fafb;
+  color: var(--el-text-color-primary);
 }
 
 .stat-trend {
@@ -171,18 +171,18 @@ const statCards = [
 }
 
 .stat-trend.up {
-  background-color: rgba(22, 163, 74, 0.15);
-  color: #4ade80;
+  background-color: var(--el-color-success-light-9);
+  color: var(--el-color-success);
 }
 
 .stat-trend.down {
-  background-color: rgba(239, 68, 68, 0.15);
-  color: #fca5a5;
+  background-color: var(--el-color-danger-light-9);
+  color: var(--el-color-danger);
 }
 
 .stat-subtext {
   font-size: 12px;
-  color: #9ca3af;
+  color: var(--el-text-color-secondary);
 }
 
 /* 占位卡片 */
@@ -191,20 +191,22 @@ const statCards = [
 }
 
 .placeholder-card {
-  border-radius: 16px;
-  background: rgba(15, 23, 42, 0.9);
-  border: 1px solid rgba(148, 163, 184, 0.35);
-  color: #e5e7eb;
+  border-radius: 8px;
+  background: var(--el-bg-color);
+  border: 1px solid var(--el-border-color-light);
+  color: var(--el-text-color-primary);
+  box-shadow: var(--el-box-shadow-light);
 }
 
 .placeholder-header {
   font-size: 14px;
   font-weight: 500;
+  color: var(--el-text-color-primary);
 }
 
 .placeholder-text {
   font-size: 13px;
-  color: #9ca3af;
+  color: var(--el-text-color-regular);
   margin: 0;
 }
 

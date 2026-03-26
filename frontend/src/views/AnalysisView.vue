@@ -362,12 +362,11 @@ watch(selectedWeek, (week) => {
 
 .toolbar-card,
 .chart-card {
-  border-radius: 16px;
-  background: rgba(17, 24, 39, 0.86);
-  border: 1px solid rgba(148, 163, 184, 0.26);
-  backdrop-filter: blur(6px);
+  background: var(--el-bg-color);
+  border: 1px solid var(--el-border-color-light);
+  border-radius: 8px;
   padding: 16px 18px;
-  box-shadow: 0 12px 30px rgba(2, 6, 23, 0.35);
+  box-shadow: var(--el-box-shadow-light);
 }
 
 .toolbar-header {
@@ -380,13 +379,13 @@ watch(selectedWeek, (week) => {
   margin: 0 0 8px;
   font-size: 18px;
   font-weight: 600;
-  color: #f9fafb;
+  color: var(--el-text-color-primary);
 }
 
 .title-block p {
   margin: 0;
   font-size: 13px;
-  color: #9ca3af;
+  color: var(--el-text-color-regular);
 }
 
 .chart-grid {
@@ -410,13 +409,13 @@ watch(selectedWeek, (week) => {
   margin: 0;
   font-size: 14px;
   font-weight: 600;
-  color: #f9fafb;
+  color: var(--el-text-color-primary);
 }
 
 .chart-subtitle {
   margin: 4px 0 0;
   font-size: 12px;
-  color: #9ca3af;
+  color: var(--el-text-color-secondary);
 }
 
 .week-selector {
@@ -425,6 +424,9 @@ watch(selectedWeek, (week) => {
 
 .chart-box {
   width: 100%;
+  background: var(--el-bg-color);
+  border: 1px solid var(--el-border-color-lighter);
+  border-radius: 8px;
 }
 
 .chart-box--scatter,
@@ -451,25 +453,6 @@ watch(selectedWeek, (week) => {
 
   .chart-grid > .chart-card {
     grid-column: span 12;
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  .toolbar-card,
-  .chart-card {
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid rgba(15, 23, 42, 0.12);
-    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
-  }
-
-  .title-block h2,
-  .chart-card h3 {
-    color: #111827;
-  }
-
-  .title-block p,
-  .chart-subtitle {
-    color: #475569;
   }
 }
 </style>

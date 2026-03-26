@@ -571,11 +571,11 @@ onMounted(() => {
 
 .toolbar-card,
 .table-card {
-  border-radius: 16px;
-  background: rgba(15, 23, 42, 0.9);
-  border: 1px solid rgba(148, 163, 184, 0.35);
+  border-radius: 8px;
+  background: var(--el-bg-color);
+  border: 1px solid var(--el-border-color-light);
   padding: 16px 18px;
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.45);
+  box-shadow: var(--el-box-shadow-light);
 }
 
 .toolbar-header {
@@ -595,13 +595,13 @@ onMounted(() => {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #f9fafb;
+  color: var(--el-text-color-primary);
 }
 
 .title-block p {
   margin: 4px 0 0;
   font-size: 13px;
-  color: #9ca3af;
+  color: var(--el-text-color-secondary);
 }
 
 .query-console {
@@ -619,7 +619,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   min-height: 320px;
-  color: #94a3b8;
+  color: var(--el-text-color-secondary);
 }
 
 .loading-icon {
@@ -644,16 +644,16 @@ onMounted(() => {
   border-collapse: separate;
   border-spacing: 0;
   min-width: 980px;
-  background: transparent;
-  border: 1px solid rgba(30, 64, 175, 0.5);
+  background: var(--el-bg-color);
+  border: 1px solid var(--el-border-color-lighter);
   border-radius: 14px;
   overflow: hidden;
 }
 
 .schedule-grid th,
 .schedule-grid td {
-  border-right: 1px solid rgba(30, 64, 175, 0.35);
-  border-bottom: 1px solid rgba(30, 64, 175, 0.35);
+  border-right: 1px solid var(--el-border-color-lighter);
+  border-bottom: 1px solid var(--el-border-color-lighter);
   padding: 10px;
   vertical-align: top;
 }
@@ -669,29 +669,29 @@ onMounted(() => {
 
 .corner-cell {
   width: 140px;
-  background: rgba(15, 23, 42, 0.95);
-  color: #e5e7eb;
+  background: var(--el-fill-color-light);
+  color: var(--el-text-color-regular);
   font-weight: 600;
   text-align: left;
 }
 
 .day-cell {
-  background: rgba(15, 23, 42, 0.95);
-  color: #e5e7eb;
+  background: var(--el-fill-color-light);
+  color: var(--el-text-color-regular);
   font-weight: 600;
   text-align: center;
 }
 
 .section-cell {
-  background: rgba(15, 23, 42, 0.85);
-  color: #cbd5e1;
+  background: var(--el-fill-color-light);
+  color: var(--el-text-color-regular);
   font-weight: 500;
   width: 140px;
 }
 
 .content-cell-composite {
   height: 92px;
-  background: rgba(2, 6, 23, 0.35);
+  background: var(--el-fill-color-blank);
   vertical-align: top;
 }
 
@@ -699,16 +699,12 @@ onMounted(() => {
   height: 100%;
   width: 100%;
   box-sizing: border-box;
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 10px 10px 8px;
   margin-bottom: 6px;
-  background: linear-gradient(
-    135deg,
-    rgba(29, 78, 216, 0.18),
-    rgba(15, 23, 42, 0.35)
-  );
-  border: 1px solid rgba(148, 163, 184, 0.25);
-  box-shadow: 0 10px 24px rgba(2, 6, 23, 0.35);
+  background: var(--el-color-primary-light-9);
+  border: 1px solid var(--el-color-primary-light-5);
+  box-shadow: none;
 }
 
 .cell-card-stack:last-of-type {
@@ -722,29 +718,27 @@ onMounted(() => {
 .cell-title {
   font-size: 13px;
   font-weight: 600;
-  color: #f9fafb;
+  color: var(--el-color-primary);
   line-height: 1.2;
   margin-bottom: 6px;
 }
 
 .cell-sub {
   font-size: 12px;
-  color: #cbd5e1;
-  opacity: 0.9;
+  color: var(--el-text-color-regular);
   margin-bottom: 4px;
 }
 
 .cell-meta {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--el-text-color-secondary);
 }
 
 .course-weeks,
 .cell-week {
   font-size: 11px;
-  color: #94a3b8;
+  color: var(--el-text-color-secondary);
   margin-top: 4px;
-  opacity: 0.9;
 }
 
 .course-weeks {
@@ -757,17 +751,17 @@ onMounted(() => {
   justify-content: center;
   min-height: 48px;
   height: 100%;
-  color: rgba(148, 163, 184, 0.6);
+  color: var(--el-text-color-placeholder);
   font-size: 12px;
 }
 
 .break-row .section-cell {
-  background: rgba(15, 23, 42, 0.75);
+  background: var(--el-fill-color-light);
 }
 
 .break-cell {
-  background: rgba(15, 23, 42, 0.5);
-  color: #94a3b8;
+  background: var(--el-fill-color-light);
+  color: var(--el-text-color-secondary);
   font-size: 12px;
 }
 </style>

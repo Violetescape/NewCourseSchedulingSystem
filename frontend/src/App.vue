@@ -13,8 +13,8 @@
           class="menu"
           :default-active="activeMenu"
           background-color="transparent"
-          text-color="#d1d5db"
-          active-text-color="#ffffff"
+          text-color="var(--el-text-color-regular)"
+          active-text-color="var(--el-color-primary)"
           @select="handleMenuSelect"
         >
           <el-menu-item
@@ -115,13 +115,13 @@ const handleMenuSelect = (key) => {
 <style scoped>
 .app-container {
   height: 100vh;
-  background-color: #0f172a;
-  color: #e5e7eb;
+  background-color: var(--el-bg-color-page);
+  color: var(--el-text-color-primary);
 }
 
 .app-aside {
-  background: radial-gradient(circle at top left, #1e293b 0, #020617 60%);
-  border-right: 1px solid rgba(148, 163, 184, 0.24);
+  background: var(--el-bg-color);
+  border-right: 1px solid var(--el-border-color-light);
   display: flex;
   flex-direction: column;
   padding: 16px 12px;
@@ -138,7 +138,7 @@ const handleMenuSelect = (key) => {
   align-self: flex-end;
   font-size: 14px;
   font-weight: 500;
-  color: #e5e7eb;
+  color: var(--el-text-color-primary);
   letter-spacing: 0.08em;
   text-align: right;
   margin-bottom: 24px;
@@ -147,7 +147,7 @@ const handleMenuSelect = (key) => {
 
 .menu {
   border-right: none;
-  background-color: transparent;
+  background-color: var(--el-bg-color);
 }
 
 .menu-icon {
@@ -155,7 +155,7 @@ const handleMenuSelect = (key) => {
 }
 
 .main-container {
-  background: linear-gradient(135deg, #020617 0%, #0b1120 35%, #020617 100%);
+  background: var(--el-bg-color-page);
 }
 
 .main-header {
@@ -163,15 +163,14 @@ const handleMenuSelect = (key) => {
   align-items: center;
   padding: 0 24px;
   box-sizing: border-box;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
-  background: linear-gradient(90deg, rgba(15, 23, 42, 0.9), rgba(2, 6, 23, 0.9));
-  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--el-border-color-light);
+  background: var(--el-bg-color);
 }
 
 .header-title {
   font-size: 18px;
   font-weight: 600;
-  color: #f9fafb;
+  color: var(--el-text-color-primary);
 }
 
 .main-content {

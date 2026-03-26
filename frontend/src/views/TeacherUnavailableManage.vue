@@ -463,11 +463,11 @@ onMounted(() => {
 
 .toolbar-card,
 .table-card {
-  border-radius: 16px;
-  background: rgba(15, 23, 42, 0.9);
-  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: var(--el-bg-color);
+  border: 1px solid var(--el-border-color-light);
+  border-radius: 8px;
   padding: 16px 18px;
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.45);
+  box-shadow: var(--el-box-shadow-light);
 }
 
 .toolbar-header {
@@ -481,13 +481,13 @@ onMounted(() => {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #f9fafb;
+  color: var(--el-text-color-primary);
 }
 
 .title-block p {
   margin: 4px 0 0;
   font-size: 13px;
-  color: #9ca3af;
+  color: var(--el-text-color-regular);
 }
 
 .add-btn {
@@ -496,24 +496,28 @@ onMounted(() => {
 
 .search-form {
   margin-top: 4px;
+  background: transparent;
+  box-shadow: none;
 }
 
 .class-table {
   margin-top: 4px;
-  --el-table-bg-color: transparent;
-  --el-table-header-bg-color: rgba(15, 23, 42, 0.9);
-  --el-table-tr-bg-color: transparent;
-  --el-table-border-color: rgba(30, 64, 175, 0.5);
+  --el-table-bg-color: var(--el-bg-color);
+  --el-table-header-bg-color: var(--el-fill-color-light);
+  --el-table-tr-bg-color: var(--el-bg-color);
+  --el-table-border-color: var(--el-border-color-lighter);
 }
 
 .table-header-row th {
-  background-color: rgba(15, 23, 42, 0.95) !important;
+  background-color: var(--el-fill-color-light) !important;
+  color: var(--el-text-color-primary);
 }
 
 .pagination-wrapper {
   margin-top: 16px;
   display: flex;
   justify-content: flex-end;
+  background: transparent;
 }
 
 .dialog-form {
