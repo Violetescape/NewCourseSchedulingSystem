@@ -34,8 +34,22 @@
         <div class="chart-card-header">
           <div>
             <h3>全校排课热力图</h3>
-            <p class="chart-subtitle">横轴：周一到周五；纵轴：第1到第12节；颜色越深表示占用越高</p>
+            <p class="chart-subtitle">横轴：周一到周五；纵轴：第1到第12节；可切换教学周查看绝对占用量</p>
           </div>
+          <el-select
+            v-model="selectedWeek"
+            class="week-selector"
+            size="small"
+            style="width: 132px"
+            @change="handleWeekChange"
+          >
+            <el-option
+              v-for="w in weekOptions"
+              :key="w"
+              :label="`第 ${w} 周`"
+              :value="w"
+            />
+          </el-select>
         </div>
         <div ref="heatmapChartDom" class="chart-box chart-box--heatmap" />
       </div>
@@ -44,7 +58,7 @@
 </template>
 
 <script setup>
-import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import * as echarts from 'echarts'
 import { getClassHealth, getClassroomEfficiency, getHeatmapData } from '@/api/analysis'
 
@@ -64,6 +78,10 @@ const GRID_LINE_COLOR = 'rgba(148, 163, 184, 0.15)'
 
 const days = ['周一', '周二', '周三', '周四', '周五']
 const sections = Array.from({ length: 12 }, (_, i) => `第 ${i + 1} 节`)
+const weekOptions = Array.from({ length: 20 }, (_, i) => i + 1)
+const selectedWeek = ref(1)
+const heatmapDataMap = ref({})
+const heatmapVisualMax = ref(10)
 
 function applyBaseStyle(option) {
   option = option || {}
@@ -166,11 +184,7 @@ function getLineOption(data) {
   })
 }
 
-function getHeatmapOption(data) {
-  const values = data.map((d) => d[2] ?? 0)
-  const max = Math.max(...values)
-  const min = Math.min(...values)
-
+function getHeatmapOption(data, visualMax) {
   return applyBaseStyle({
     animationDuration: 1200,
     grid: { top: 50, left: 90, right: 26, bottom: 28 },
@@ -187,8 +201,8 @@ function getHeatmapOption(data) {
       }
     },
     visualMap: {
-      min,
-      max,
+      min: 0,
+      max: Math.max(1, visualMax || 1),
       calculable: true,
       orient: 'horizontal',
       left: 'center',
@@ -244,6 +258,41 @@ function normalizeResp(resp) {
   return resp?.data?.data ?? []
 }
 
+function normalizeHeatmapDataMap(rawData) {
+  // 新接口：{ "1": [...], "2": [...] ... }
+  if (rawData && !Array.isArray(rawData) && typeof rawData === 'object') {
+    return rawData
+  }
+  // 旧接口：[{ weekday, section, occupiedCount }, ...]
+  if (Array.isArray(rawData)) {
+    const legacyWeekList = rawData
+    const map = {}
+    for (const w of weekOptions) {
+      map[w] = legacyWeekList
+    }
+    return map
+  }
+  return {}
+}
+
+function getWeekHeatmapData(week) {
+  const weekNodesRaw = heatmapDataMap.value?.[week]
+  const weekNodes = Array.isArray(weekNodesRaw) ? weekNodesRaw : []
+  return weekNodes.map((n) => [n.weekday, n.section, n.occupiedCount])
+}
+
+function renderHeatmapByWeek(week) {
+  if (!heatmapChart) return
+  const heatmapData = getWeekHeatmapData(week)
+  heatmapChart.setOption({
+    series: [{ data: heatmapData }]
+  })
+}
+
+function handleWeekChange(week) {
+  renderHeatmapByWeek(week)
+}
+
 async function loadAnalysisData() {
   const [effRes, healthRes, heatRes] = await Promise.all([
     getClassroomEfficiency(),
@@ -253,12 +302,13 @@ async function loadAnalysisData() {
 
   const efficiencyData = normalizeResp(effRes)
   const healthData = normalizeResp(healthRes)
-  const heatmapNodes = normalizeResp(heatRes)
-  const heatmapData = heatmapNodes.map((n) => [n.weekday, n.section, n.occupiedCount])
+  heatmapDataMap.value = normalizeHeatmapDataMap(normalizeResp(heatRes))
+  heatmapVisualMax.value = Math.max(1, efficiencyData.length || 10)
+  const initialHeatmapData = getWeekHeatmapData(selectedWeek.value)
 
   scatterChart?.setOption(getScatterOption(efficiencyData), true)
   lineChart?.setOption(getLineOption(healthData), true)
-  heatmapChart?.setOption(getHeatmapOption(heatmapData), true)
+  heatmapChart?.setOption(getHeatmapOption(initialHeatmapData, heatmapVisualMax.value), true)
 }
 
 onMounted(async () => {
@@ -296,6 +346,10 @@ onBeforeUnmount(() => {
   scatterChart = null
   lineChart = null
   heatmapChart = null
+})
+
+watch(selectedWeek, (week) => {
+  renderHeatmapByWeek(week)
 })
 </script>
 
@@ -363,6 +417,10 @@ onBeforeUnmount(() => {
   margin: 4px 0 0;
   font-size: 12px;
   color: #9ca3af;
+}
+
+.week-selector {
+  flex-shrink: 0;
 }
 
 .chart-box {

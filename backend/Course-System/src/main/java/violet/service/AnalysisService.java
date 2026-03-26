@@ -5,6 +5,7 @@ import violet.pojo.ClassroomEfficiencyDTO;
 import violet.pojo.HeatmapNodeDTO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 排课效能分析服务。
@@ -24,6 +25,6 @@ public interface AnalysisService {
     /**
      * 全校排课热力图（weekday/section占用频次）。
      */
-    List<HeatmapNodeDTO> getHeatmapNodes();
+    Map<Integer, List<HeatmapNodeDTO>> getHeatmapNodes();
 }
 

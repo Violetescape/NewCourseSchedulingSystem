@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -135,37 +136,38 @@ public class AnalysisServiceImpl implements AnalysisService {
     }
 
     @Override
-    public List<HeatmapNodeDTO> getHeatmapNodes() {
+    public Map<Integer, List<HeatmapNodeDTO>> getHeatmapNodes() {
         List<ScheduleRawDTO> rawList = safeList(scheduleMapper.findAllRawForConflict());
-        int[][] counts = new int[TOTAL_WEEKDAYS][TOTAL_SECTIONS];
+        int[][][] counts = new int[TOTAL_WEEKS][TOTAL_WEEKDAYS][TOTAL_SECTIONS];
 
         for (ScheduleRawDTO r : rawList) {
+            Integer week = r.getWeek();
             Integer weekday = r.getWeekday();
-            Integer startSection = r.getSection();
-            if (weekday == null || startSection == null) {
+            Integer section = r.getSection();
+            if (week == null || weekday == null || section == null) {
                 continue;
             }
-            if (weekday < 1 || weekday > TOTAL_WEEKDAYS) {
+            if (week < 1 || week > TOTAL_WEEKS
+                    || weekday < 1 || weekday > TOTAL_WEEKDAYS
+                    || section < 1 || section > TOTAL_SECTIONS) {
                 continue;
             }
-            int singleHour = safeSingleHour(r.getCourseSingleHour());
-            for (int i = 0; i < singleHour; i++) {
-                int sec = startSection + i;
-                if (sec >= 1 && sec <= TOTAL_SECTIONS) {
-                    counts[weekday - 1][sec - 1] += 1;
-                }
-            }
+            counts[week - 1][weekday - 1][section - 1] += 1;
         }
 
-        List<HeatmapNodeDTO> result = new ArrayList<>();
-        for (int weekday = 0; weekday < TOTAL_WEEKDAYS; weekday++) {
-            for (int section = 0; section < TOTAL_SECTIONS; section++) {
-                result.add(HeatmapNodeDTO.builder()
-                        .weekday(weekday)
-                        .section(section)
-                        .occupiedCount(counts[weekday][section])
-                        .build());
+        Map<Integer, List<HeatmapNodeDTO>> result = new LinkedHashMap<>();
+        for (int week = 1; week <= TOTAL_WEEKS; week++) {
+            List<HeatmapNodeDTO> weeklyNodes = new ArrayList<>();
+            for (int weekday = 0; weekday < TOTAL_WEEKDAYS; weekday++) {
+                for (int section = 0; section < TOTAL_SECTIONS; section++) {
+                    weeklyNodes.add(HeatmapNodeDTO.builder()
+                            .weekday(weekday)
+                            .section(section)
+                            .occupiedCount(counts[week - 1][weekday][section])
+                            .build());
+                }
             }
+            result.put(week, weeklyNodes);
         }
         return result;
     }
