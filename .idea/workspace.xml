@@ -4,11 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9c67d888-9ee1-4abf-9663-b187d4cecc1e" name="Changes" comment="修改部分前端">
+    <list default="true" id="9c67d888-9ee1-4abf-9663-b187d4cecc1e" name="Changes" comment="前端ui修改">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/AnalysisService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/AnalysisService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/impl/AnalysisServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/impl/AnalysisServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/views/AnalysisView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/AnalysisView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/AutoScheduleView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/AutoScheduleView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/ClassManage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/ClassManage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/ClassroomManage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/ClassroomManage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/CourseManage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/CourseManage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/ScheduleView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/ScheduleView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/TeacherManage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/TeacherManage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/TeacherUnavailableManage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/TeacherUnavailableManage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/TeachingTaskManage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/TeachingTaskManage.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,7 +121,7 @@
       <workItem from="1774417639645" duration="2033000" />
       <workItem from="1774440710040" duration="10805000" />
       <workItem from="1774504283985" duration="567000" />
-      <workItem from="1774519025746" duration="8481000" />
+      <workItem from="1774519025746" duration="10424000" />
     </task>
     <task id="LOCAL-00001" summary="整合">
       <option name="closed" value="true" />
@@ -163,7 +171,23 @@
       <option name="project" value="LOCAL" />
       <updated>1774543231814</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="效能分析的热力图修改">
+      <option name="closed" value="true" />
+      <created>1774545395437</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1774545395437</updated>
+    </task>
+    <task id="LOCAL-00008" summary="前端ui修改">
+      <option name="closed" value="true" />
+      <created>1774548043513</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1774548043513</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -175,6 +199,8 @@
     <MESSAGE value="实现自动排课" />
     <MESSAGE value="添加效能分析部分" />
     <MESSAGE value="修改部分前端" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改部分前端" />
+    <MESSAGE value="效能分析的热力图修改" />
+    <MESSAGE value="前端ui修改" />
+    <option name="LAST_COMMIT_MESSAGE" value="前端ui修改" />
   </component>
 </project>

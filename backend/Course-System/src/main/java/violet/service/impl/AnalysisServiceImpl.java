@@ -143,16 +143,21 @@ public class AnalysisServiceImpl implements AnalysisService {
         for (ScheduleRawDTO r : rawList) {
             Integer week = r.getWeek();
             Integer weekday = r.getWeekday();
-            Integer section = r.getSection();
-            if (week == null || weekday == null || section == null) {
+            Integer startSection = r.getSection();
+            if (week == null || weekday == null || startSection == null) {
                 continue;
             }
             if (week < 1 || week > TOTAL_WEEKS
-                    || weekday < 1 || weekday > TOTAL_WEEKDAYS
-                    || section < 1 || section > TOTAL_SECTIONS) {
+                    || weekday < 1 || weekday > TOTAL_WEEKDAYS) {
                 continue;
             }
-            counts[week - 1][weekday - 1][section - 1] += 1;
+            int singleHour = safeSingleHour(r.getCourseSingleHour());
+            for (int i = 0; i < singleHour; i++) {
+                int sec = startSection + i;
+                if (sec >= 1 && sec <= TOTAL_SECTIONS) {
+                    counts[week - 1][weekday - 1][sec - 1] += 1;
+                }
+            }
         }
 
         Map<Integer, List<HeatmapNodeDTO>> result = new LinkedHashMap<>();

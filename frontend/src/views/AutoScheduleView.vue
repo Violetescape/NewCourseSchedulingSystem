@@ -563,25 +563,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.auto-schedule-page {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.toolbar-card,
-.table-card {
-  border-radius: 8px;
-  background: var(--el-bg-color);
-  border: 1px solid var(--el-border-color-light);
-  padding: 16px 18px;
-  box-shadow: var(--el-box-shadow-light);
-}
-
 .toolbar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 16px;
 }
 
@@ -589,23 +571,6 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.title-block h2 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--el-text-color-primary);
-}
-
-.title-block p {
-  margin: 4px 0 0;
-  font-size: 13px;
-  color: var(--el-text-color-secondary);
-}
-
-.query-console {
-  margin-top: 4px;
 }
 
 .search-form {

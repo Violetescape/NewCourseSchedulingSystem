@@ -71,7 +71,7 @@ let lineChart = null
 let heatmapChart = null
 let resizeHandler = null
 
-const TEXT_COLOR = '#e5e7eb'
+const TEXT_COLOR = '#111827'
 const SUB_TEXT_COLOR = '#94a3b8'
 const AXIS_LINE_COLOR = 'rgba(148, 163, 184, 0.35)'
 const GRID_LINE_COLOR = 'rgba(148, 163, 184, 0.15)'
@@ -239,11 +239,13 @@ function getHeatmapOption(data, visualMax) {
         data,
         label: { show: false },
         emphasis: {
+          focus: 'self',
           itemStyle: {
-            shadowBlur: 16,
-            shadowColor: 'rgba(96, 165, 250, 0.45)'
+            borderColor: 'rgba(255, 255, 255, 0.95)',
+            borderWidth: 2
           }
         },
+        blur: { itemStyle: { opacity: 1 } },
         itemStyle: {
           borderColor: 'rgba(148, 163, 184, 0.18)',
           borderWidth: 1
@@ -354,37 +356,16 @@ watch(selectedWeek, (week) => {
 </script>
 
 <style scoped>
-.analysis-page {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.toolbar-card,
-.chart-card {
-  background: var(--el-bg-color);
-  border: 1px solid var(--el-border-color-light);
-  border-radius: 8px;
-  padding: 16px 18px;
-  box-shadow: var(--el-box-shadow-light);
-}
-
 .toolbar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  margin-bottom: 0;
 }
 
 .title-block h2 {
   margin: 0 0 8px;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--el-text-color-primary);
 }
 
 .title-block p {
   margin: 0;
-  font-size: 13px;
   color: var(--el-text-color-regular);
 }
 
