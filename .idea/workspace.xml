@@ -6,11 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="9c67d888-9ee1-4abf-9663-b187d4cecc1e" name="Changes" comment="实现自动排课">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/mapper/CourseMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/mapper/CourseMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/pojo/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/pojo/Course.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/impl/AutoSchedulingServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/impl/AutoSchedulingServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/resources/mapper/ClassroomMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/resources/mapper/ClassroomMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/resources/mapper/CourseMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/resources/mapper/CourseMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,6 +112,8 @@
       <workItem from="1774357646287" duration="849000" />
       <workItem from="1774417639645" duration="2033000" />
       <workItem from="1774440710040" duration="10805000" />
+      <workItem from="1774504283985" duration="567000" />
+      <workItem from="1774519025746" duration="6558000" />
     </task>
     <task id="LOCAL-00001" summary="整合">
       <option name="closed" value="true" />

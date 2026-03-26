@@ -54,6 +54,7 @@
         <TeachingTaskManage v-else-if="activeMenu === 'teaching-tasks'" />
         <ScheduleView v-else-if="activeMenu === 'schedule-view'" />
         <AutoScheduleView v-else-if="activeMenu === 'auto-schedule'" />
+        <AnalysisView v-else-if="activeMenu === 'analytics'" />
         <div v-else class="placeholder-page">
           <el-empty
             :description="`功能页面「${currentPageTitle}」占位，后续可接入实际组件或路由。`"
@@ -84,6 +85,7 @@ import TeachingTaskManage from './views/TeachingTaskManage.vue'
 import TeacherUnavailableManage from './views/TeacherUnavailableManage.vue'
 import ScheduleView from './views/ScheduleView.vue'
 import AutoScheduleView from './views/AutoScheduleView.vue'
+import AnalysisView from './views/AnalysisView.vue'
 
 const menuItems = [
   { key: 'home', label: '首页', icon: House },
