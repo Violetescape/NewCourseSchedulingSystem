@@ -494,6 +494,7 @@ onMounted(() => {
 
 .schedule-grid {
   width: 100%;
+  table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
   min-width: 980px;
@@ -543,14 +544,17 @@ onMounted(() => {
 }
 
 .content-cell {
-  height: 92px;
+  min-height: 92px;
   background: rgba(2, 6, 23, 0.35);
+  vertical-align: top;
 }
 
 .cell-card {
-  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
   border-radius: 12px;
   padding: 10px 10px 8px;
+  margin-bottom: 6px;
   background: linear-gradient(
     135deg,
     rgba(29, 78, 216, 0.18),
@@ -558,6 +562,10 @@ onMounted(() => {
   );
   border: 1px solid rgba(148, 163, 184, 0.25);
   box-shadow: 0 10px 24px rgba(2, 6, 23, 0.35);
+}
+
+.cell-card:last-of-type {
+  margin-bottom: 0;
 }
 
 .cell-title {
@@ -593,6 +601,7 @@ onMounted(() => {
 }
 
 .cell-empty {
+  min-height: 48px;
   height: 100%;
   display: flex;
   align-items: center;

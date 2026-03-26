@@ -640,6 +640,7 @@ onMounted(() => {
 
 .schedule-grid {
   width: 100%;
+  table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
   min-width: 980px;
@@ -689,14 +690,17 @@ onMounted(() => {
 }
 
 .content-cell-composite {
-  min-height: 92px;
+  height: 92px;
   background: rgba(2, 6, 23, 0.35);
   vertical-align: top;
 }
 
 .cell-card-stack {
-  border-radius: 10px;
-  padding: 8px 10px 6px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 12px;
+  padding: 10px 10px 8px;
   margin-bottom: 6px;
   background: linear-gradient(
     135deg,
@@ -704,38 +708,42 @@ onMounted(() => {
     rgba(15, 23, 42, 0.35)
   );
   border: 1px solid rgba(148, 163, 184, 0.25);
-  box-shadow: 0 6px 16px rgba(2, 6, 23, 0.3);
+  box-shadow: 0 10px 24px rgba(2, 6, 23, 0.35);
 }
 
 .cell-card-stack:last-of-type {
   margin-bottom: 0;
 }
 
+.content-cell-composite > .cell-card-stack:only-of-type {
+  height: 100%;
+}
+
 .cell-title {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: #f9fafb;
   line-height: 1.2;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .cell-sub {
-  font-size: 11px;
+  font-size: 12px;
   color: #cbd5e1;
   opacity: 0.9;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 }
 
 .cell-meta {
-  font-size: 11px;
+  font-size: 12px;
   color: #94a3b8;
 }
 
 .course-weeks,
 .cell-week {
-  font-size: 10px;
+  font-size: 11px;
   color: #94a3b8;
-  margin-top: 3px;
+  margin-top: 4px;
   opacity: 0.9;
 }
 
@@ -748,6 +756,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   min-height: 48px;
+  height: 100%;
   color: rgba(148, 163, 184, 0.6);
   font-size: 12px;
 }
