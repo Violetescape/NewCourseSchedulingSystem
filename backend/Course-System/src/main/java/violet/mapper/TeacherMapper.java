@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import violet.pojo.Teacher;
 
@@ -61,5 +62,8 @@ public interface TeacherMapper {
      */
     @Delete("delete from teacher where Teacher_ID = #{teacherId}")
     void deleteById(Integer teacherId);
+
+    @Select("select Teacher_ID from teacher where Teacher_Name = #{teacherName} limit 1")
+    Integer findIdByName(String teacherName);
 }
 

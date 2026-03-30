@@ -63,5 +63,13 @@
         </where>
     </select>
 
+    <insert id="insertBatch">
+        insert into teaching_task(Teacher_ID, Course_ID, Class_ID, Task_State)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.teacherId}, #{item.courseId}, #{item.classId}, #{item.taskState})
+        </foreach>
+    </insert>
+
 </mapper>
 

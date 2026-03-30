@@ -1,5 +1,6 @@
 package violet.service;
 
+import org.springframework.web.multipart.MultipartFile;
 import violet.pojo.PageResult;
 import violet.pojo.TeachingTask;
 import violet.pojo.TeachingTaskVO;
@@ -41,5 +42,10 @@ public interface TeachingTaskService {
      * 根据 ID 删除教学任务。
      */
     void deleteById(Integer taskId);
+
+    /**
+     * Excel 批量导入教学任务。
+     */
+    void importFromExcel(MultipartFile file);
 }
 

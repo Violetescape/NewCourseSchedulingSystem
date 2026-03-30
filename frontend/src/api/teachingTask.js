@@ -22,3 +22,17 @@ export const deleteTeachingTask = (id) => {
   return axios.delete(`/teaching-tasks/${id}`)
 }
 
+// 下载教学任务导入模板
+export const getTeachingTaskTemplateUrl = () => {
+  return '/api/teaching-tasks/downloadTemplate'
+}
+
+// Excel 导入教学任务
+export const importTeachingTaskExcel = (file) => {
+  const formData = new FormData()
+  formData.append('file', file)
+  return axios.post('/teaching-tasks/import', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+}
+

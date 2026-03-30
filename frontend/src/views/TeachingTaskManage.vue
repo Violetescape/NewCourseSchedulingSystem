@@ -7,9 +7,19 @@
           <h2>教学任务管理</h2>
           <p>按教师、课程、班级与状态检索教学任务。</p>
         </div>
-        <el-button type="primary" class="add-btn" @click="handleOpenAddDialog">
-          新增教学任务
-        </el-button>
+        <div class="toolbar-actions">
+          <el-button @click="handleDownloadTemplate">下载导入模板</el-button>
+          <el-upload
+            :show-file-list="false"
+            accept=".xlsx, .xls"
+            :before-upload="handleImportExcel"
+          >
+            <el-button>Excel 导入</el-button>
+          </el-upload>
+          <el-button type="primary" class="add-btn" @click="handleOpenAddDialog">
+            新增教学任务
+          </el-button>
+        </div>
       </div>
 
       <el-form
@@ -249,7 +259,9 @@ import {
   getTeachingTaskPage,
   addTeachingTask,
   updateTeachingTask,
-  deleteTeachingTask
+  deleteTeachingTask,
+  getTeachingTaskTemplateUrl,
+  importTeachingTaskExcel
 } from '../api/teachingTask'
 import { getTeacherPage } from '../api/teacher'
 import { getCoursePage } from '../api/course'
@@ -310,6 +322,25 @@ const getTaskStateTagType = (state) => {
   if (state === '已排课') return 'success'
   if (state === '未排课') return 'warning'
   return ''
+}
+
+const handleDownloadTemplate = () => {
+  window.open(getTeachingTaskTemplateUrl(), '_blank')
+}
+
+const handleImportExcel = async (rawFile) => {
+  try {
+    const { data } = await importTeachingTaskExcel(rawFile)
+    if (data?.code === 1) {
+      ElMessage.success('导入成功')
+      fetchTeachingTaskPage()
+    } else {
+      ElMessage.error(data?.msg || '导入失败')
+    }
+  } catch (error) {
+    ElMessage.error('导入请求失败')
+  }
+  return false
 }
 
 // 分页查询教学任务
@@ -487,6 +518,12 @@ onMounted(() => {
 <style scoped>
 .dialog-form {
   padding-top: 8px;
+}
+
+.toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .dialog-footer {

@@ -1,5 +1,6 @@
 package violet.controller;
 
+import com.alibaba.excel.EasyExcel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,12 +10,19 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import violet.pojo.PageResult;
 import violet.pojo.Result;
 import violet.pojo.TeachingTask;
+import violet.pojo.TeachingTaskExcelDTO;
 import violet.pojo.TeachingTaskVO;
 import violet.service.TeachingTaskService;
 
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 /**
  * 教学任务相关接口（RESTful）。
  * <p>
@@ -80,6 +88,28 @@ public class TeachingTaskController {
         System.out.println("删除教学任务 id=" + id);
         teachingTaskService.deleteById(id);
         return Result.success();
+    }
+
+    @GetMapping("/teaching-tasks/downloadTemplate")
+    public void downloadTemplate(HttpServletResponse response) throws IOException {
+        String fileName = URLEncoder.encode("教学任务导入模板", StandardCharsets.UTF_8).replaceAll("\\+", "%20");
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setCharacterEncoding("utf-8");
+        response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
+
+        EasyExcel.write(response.getOutputStream(), TeachingTaskExcelDTO.class)
+                .sheet("模板")
+                .doWrite(Collections.emptyList());
+    }
+
+    @PostMapping("/teaching-tasks/import")
+    public Result importExcel(@RequestParam("file") MultipartFile file) {
+        try {
+            teachingTaskService.importFromExcel(file);
+            return Result.success();
+        } catch (RuntimeException e) {
+            return Result.error(e.getMessage());
+        }
     }
 }
 

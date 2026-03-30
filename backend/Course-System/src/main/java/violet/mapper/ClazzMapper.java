@@ -29,6 +29,9 @@ public interface ClazzMapper {
             "from class where Class_ID = #{classId}")
     Clazz findById(Integer classId);
 
+    @Select("select Class_ID from class where Class_Name = #{className} limit 1")
+    Integer findIdByName(String className);
+
 
     //  根据Id删除班级
     @Delete("delete from class where Class_ID = #{classId}")

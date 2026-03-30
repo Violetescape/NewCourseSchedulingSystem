@@ -75,5 +75,8 @@ public interface CourseMapper {
             "Course_SingleHour as courseSingleHour, " +
             "COALESCE(NULLIF(Required_Classroom_Type, ''), '普通教室') as requiredClassroomType from course where Course_ID = #{courseId}")
     Course findById(Integer courseId);
+
+    @Select("select Course_ID from course where Course_Name = #{courseName} limit 1")
+    Integer findIdByName(String courseName);
 }
 

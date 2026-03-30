@@ -53,6 +53,8 @@ public interface TeachingTaskMapper {
             "values(#{teacherId}, #{courseId}, #{classId}, #{taskState})")
     void add(TeachingTask teachingTask);
 
+    void insertBatch(@Param("list") List<TeachingTask> tasks);
+
     /**
      * 修改教学任务。
      */
