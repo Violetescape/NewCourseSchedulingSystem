@@ -237,8 +237,14 @@ public class AutoSchedulingServiceImpl implements AutoSchedulingService {
         int studentNum = clazz.getClassNum() != null ? clazz.getClassNum() : 0;
         String reqRoomType = course.getRequiredClassroomType();
 
-        // 时间搜索循环
+        // 时间搜索循环：对星期顺序做随机扰动，缓解排课在周前段的头部堆积
+        List<Integer> shuffledWeekdays = new ArrayList<>();
         for (int weekday = MIN_WEEKDAY; weekday <= MAX_WEEKDAY; weekday++) {
+            shuffledWeekdays.add(weekday);
+        }
+        Collections.shuffle(shuffledWeekdays);
+
+        for (Integer weekday : shuffledWeekdays) {
             for (int section = MIN_SECTION; section <= MAX_SECTION; section++) {
                 int endSection = section + singleHour - 1;
 

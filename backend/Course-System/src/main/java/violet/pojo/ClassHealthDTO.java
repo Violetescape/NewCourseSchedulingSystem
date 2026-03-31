@@ -20,4 +20,3 @@ public class ClassHealthDTO {
     /** 1-20周每周健康度得分(0-100) */
     private List<Double> weeklyScores;
 }
-
