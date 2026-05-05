@@ -13,7 +13,7 @@
       <div class="chart-card">
         <div class="chart-card-header">
           <div>
-            <h3>教室效能波士顿矩阵</h3>
+            <h3>教室效能</h3>
             <p class="chart-subtitle">X：时间利用率(%)，Y：空间满载率(%)，50% 为基准线</p>
           </div>
         </div>
