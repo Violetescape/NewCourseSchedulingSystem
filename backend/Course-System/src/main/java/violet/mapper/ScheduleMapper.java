@@ -1,5 +1,6 @@
 package violet.mapper;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -50,5 +51,18 @@ public interface ScheduleMapper {
             "values(#{scheduleClassId}, #{scheduleTeacherId}, #{scheduleCourseId}, " +
             "#{scheduleClassroomId}, #{scheduleWeekday}, #{scheduleSection}, #{scheduleWeek})")
     void insert(Schedule schedule);
+
+    /**
+     * 按教学任务删除排课记录（合班：匹配教师、课程及全部班级 ID）。
+     */
+    void deleteByTaskKeys(@Param("teacherId") Integer teacherId,
+                          @Param("courseId") Integer courseId,
+                          @Param("classIdList") List<Integer> classIdList);
+
+    /**
+     * 清空全校排课记录（使用 DELETE 避免 TRUNCATE 外键约束问题）。
+     */
+    @Delete("delete from schedule")
+    void deleteAllSchedules();
 }
 

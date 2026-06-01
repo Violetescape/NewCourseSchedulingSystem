@@ -49,4 +49,9 @@ public class ScheduleRawDTO {
      * 单次授课课时数（连续占用节次数）
      */
     private Integer courseSingleHour;
+
+    /**
+     * 课程类型：1-必修, 2-专业选修, 3-公选（来自 course 表，可为空）
+     */
+    private Integer courseType;
 }

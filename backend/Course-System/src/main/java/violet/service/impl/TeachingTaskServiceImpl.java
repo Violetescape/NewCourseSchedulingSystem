@@ -98,8 +98,8 @@ public class TeachingTaskServiceImpl implements TeachingTaskService {
 
             String teacherName = trim(row.getTeacherName());
             String courseName = trim(row.getCourseName());
-            String className = trim(row.getClassName());
-            if (teacherName == null && courseName == null && className == null) {
+            String classNameRaw = trim(row.getClassName());
+            if (teacherName == null && courseName == null && classNameRaw == null) {
                 continue;
             }
 
@@ -111,15 +111,28 @@ public class TeachingTaskServiceImpl implements TeachingTaskService {
             if (courseId == null) {
                 throw new RuntimeException("课程数据不存在: " + courseName);
             }
-            Integer classId = clazzMapper.findIdByName(className);
-            if (classId == null) {
-                throw new RuntimeException("班级数据不存在: " + className);
+
+            String[] classNameParts = classNameRaw.split("[,，、]");
+            List<String> classIdParts = new ArrayList<>();
+            for (String part : classNameParts) {
+                String cn = trim(part);
+                if (cn == null) {
+                    continue;
+                }
+                Integer cid = clazzMapper.findIdByName(cn);
+                if (cid == null) {
+                    throw new RuntimeException("班级数据不存在: " + cn);
+                }
+                classIdParts.add(String.valueOf(cid));
+            }
+            if (classIdParts.isEmpty()) {
+                throw new RuntimeException("班级名称不能为空: " + classNameRaw);
             }
 
             TeachingTask teachingTask = new TeachingTask();
             teachingTask.setTeacherId(teacherId);
             teachingTask.setCourseId(courseId);
-            teachingTask.setClassId(classId);
+            teachingTask.setClassIds(String.join(",", classIdParts));
             teachingTask.setTaskState("未排课");
             tasks.add(teachingTask);
         }

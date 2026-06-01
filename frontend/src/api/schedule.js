@@ -32,3 +32,18 @@ export const autoSchedule = () => {
   })
 }
 
+/** 手动排课冲突校验（教师 / 教室 / 班级矩阵） */
+export const validateManualSchedule = (data) => {
+  return axios.post('/auto-schedule/manual/validate', data, { timeout: 15000 })
+}
+
+/** 手动排课落库 */
+export const manualSchedule = (data) => {
+  return axios.post('/auto-schedule/manual', data, { timeout: 15000 })
+}
+
+/** 一键重置排课：清空全校课表并将任务恢复为未排课 */
+export const resetAutoScheduling = () => {
+  return axios.post('/auto-scheduling/reset', null, { timeout: 15000 })
+}
+

@@ -39,6 +39,11 @@ public interface TeachingTaskMapper {
                                          @Param("taskState") String taskState);
 
     /**
+     * 按任务主键查询单条 VO（关联教师、课程、班级）。
+     */
+    TeachingTaskVO findVoByTaskId(@Param("taskId") Integer taskId);
+
+    /**
      * 条件查询总记录数。
      */
     Long countByCondition(@Param("teacherId") Integer teacherId,
@@ -49,8 +54,8 @@ public interface TeachingTaskMapper {
     /**
      * 新增教学任务（Task_ID 自增，故不插入）。
      */
-    @Insert("insert into teaching_task(Teacher_ID, Course_ID, Class_ID, Task_State) " +
-            "values(#{teacherId}, #{courseId}, #{classId}, #{taskState})")
+    @Insert("insert into teaching_task(Teacher_ID, Course_ID, Class_Ids, Task_State) " +
+            "values(#{teacherId}, #{courseId}, #{classIds}, #{taskState})")
     void add(TeachingTask teachingTask);
 
     void insertBatch(@Param("list") List<TeachingTask> tasks);
@@ -61,7 +66,7 @@ public interface TeachingTaskMapper {
     @Update("update teaching_task " +
             "set Teacher_ID = #{teacherId}, " +
             "    Course_ID = #{courseId}, " +
-            "    Class_ID = #{classId}, " +
+            "    Class_Ids = #{classIds}, " +
             "    Task_State = #{taskState} " +
             "where Task_ID = #{taskId}")
     void update(TeachingTask teachingTask);
@@ -71,5 +76,11 @@ public interface TeachingTaskMapper {
      */
     @Delete("delete from teaching_task where Task_ID = #{taskId}")
     void deleteById(Integer taskId);
+
+    /**
+     * 将全部教学任务状态重置为「未排课」。
+     */
+    @Update("update teaching_task set Task_State = '未排课'")
+    void resetAllTaskStates();
 }
 

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import violet.mapper.ClassroomMapper;
 import violet.mapper.ClazzMapper;
 import violet.mapper.ScheduleMapper;
+import violet.pojo.AnalysisSliceDTO;
 import violet.pojo.ClassHealthDTO;
 import violet.pojo.Classroom;
 import violet.pojo.ClassroomEfficiencyDTO;
@@ -31,6 +32,8 @@ public class AnalysisServiceImpl implements AnalysisService {
     private static final int TOTAL_WEEKDAYS = 5;
     private static final int TOTAL_SECTIONS = 12;
     private static final double TIME_BASE = TOTAL_WEEKS * TOTAL_WEEKDAYS * TOTAL_SECTIONS;
+
+    private static final int CLASSROOM_PAGE_SIZE = 50_000;
 
     @Autowired
     private ScheduleMapper scheduleMapper;
@@ -175,6 +178,115 @@ public class AnalysisServiceImpl implements AnalysisService {
             result.put(week, weeklyNodes);
         }
         return result;
+    }
+
+    @Override
+    public List<AnalysisSliceDTO> getClassroomTypeDistribution() {
+        List<Classroom> rooms = safeList(classroomMapper.findByCondition(0, CLASSROOM_PAGE_SIZE, null, null));
+        Map<String, Double> counts = new HashMap<>();
+        for (Classroom room : rooms) {
+            String type = room.getClassroomType();
+            if (type == null || type.isBlank()) {
+                type = "未分类";
+            } else {
+                type = type.trim();
+            }
+            counts.merge(type, 1.0, Double::sum);
+        }
+        return counts.entrySet().stream()
+                .map(e -> AnalysisSliceDTO.builder()
+                        .name(e.getKey())
+                        .value(round2(e.getValue()))
+                        .build())
+                .sorted((a, b) -> Double.compare(nvlD(b.getValue()), nvlD(a.getValue())))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AnalysisSliceDTO> getWeekdayLessonTrend() {
+        List<ScheduleRawDTO> rawList = safeList(scheduleMapper.findAllRawForConflict());
+        String[] labels = {"", "周一", "周二", "周三", "周四", "周五"};
+        double[] totals = new double[TOTAL_WEEKDAYS + 1];
+        for (ScheduleRawDTO r : rawList) {
+            Integer weekday = r.getWeekday();
+            if (weekday == null || weekday < 1 || weekday > TOTAL_WEEKDAYS) {
+                continue;
+            }
+            totals[weekday] += safeSingleHour(r.getCourseSingleHour());
+        }
+        List<AnalysisSliceDTO> list = new ArrayList<>();
+        for (int d = 1; d <= TOTAL_WEEKDAYS; d++) {
+            list.add(AnalysisSliceDTO.builder()
+                    .name(labels[d])
+                    .value(round2(totals[d]))
+                    .build());
+        }
+        return list;
+    }
+
+    @Override
+    public List<AnalysisSliceDTO> getCourseTypeHourDistribution() {
+        List<ScheduleRawDTO> rawList = safeList(scheduleMapper.findAllRawForConflict());
+        Map<Integer, Double> hourByType = new HashMap<>();
+        for (ScheduleRawDTO r : rawList) {
+            Integer ct = r.getCourseType();
+            int key = ct != null ? ct : 0;
+            hourByType.merge(key, (double) safeSingleHour(r.getCourseSingleHour()), Double::sum);
+        }
+        return hourByType.entrySet().stream()
+                .map(e -> AnalysisSliceDTO.builder()
+                        .name(courseTypeLabel(e.getKey()))
+                        .value(round2(e.getValue()))
+                        .build())
+                .sorted((a, b) -> Double.compare(nvlD(b.getValue()), nvlD(a.getValue())))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AnalysisSliceDTO> getClassroomCapacityDistribution() {
+        List<Classroom> rooms = safeList(classroomMapper.findByCondition(0, CLASSROOM_PAGE_SIZE, null, null));
+        long le29 = 0;
+        long le60 = 0;
+        long le120 = 0;
+        long gt120 = 0;
+        for (Classroom room : rooms) {
+            int cap = nvlInt(room.getClassroomCap());
+            if (cap < 30) {
+                le29++;
+            } else if (cap <= 60) {
+                le60++;
+            } else if (cap <= 120) {
+                le120++;
+            } else {
+                gt120++;
+            }
+        }
+        List<AnalysisSliceDTO> list = new ArrayList<>();
+        list.add(AnalysisSliceDTO.builder().name("30人以下").value((double) le29).build());
+        list.add(AnalysisSliceDTO.builder().name("30-60人").value((double) le60).build());
+        list.add(AnalysisSliceDTO.builder().name("60-120人").value((double) le120).build());
+        list.add(AnalysisSliceDTO.builder().name("120人以上").value((double) gt120).build());
+        return list;
+    }
+
+    private String courseTypeLabel(Integer courseType) {
+        if (courseType == null || courseType == 0) {
+            return "未分类";
+        }
+        switch (courseType) {
+            case 1:
+                return "必修";
+            case 2:
+                return "专业选修";
+            case 3:
+                return "公选";
+            default:
+                return "其它类型(" + courseType + ")";
+        }
+    }
+
+    private double nvlD(Double v) {
+        return v == null ? 0.0 : v;
     }
 
     private double calcWeeklyCompactness(Map<Integer, Set<Integer>> dayMap) {

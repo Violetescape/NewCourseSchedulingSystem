@@ -17,6 +17,15 @@
           >
             一键自动排课
           </el-button>
+          <el-button
+            id="btn-reset-schedule"
+            type="danger"
+            plain
+            :loading="isResettingSchedule"
+            @click="handleResetSchedule"
+          >
+            清空并重置课表
+          </el-button>
         </div>
       </div>
 
@@ -100,6 +109,64 @@
       </div>
     </section>
 
+    <!-- 未排课任务与人机协同手动编排 -->
+    <section class="task-panel-card">
+      <div class="task-panel-header">
+        <div>
+          <h3>手动排课</h3>
+          <p class="task-panel-desc">
+            对「未排课」任务可手动指定教学周、星期、节次与教室；校验逻辑与自动排课一致。可将任务拖到下方空时间格快速打开编排窗口。
+          </p>
+        </div>
+        <el-button text type="primary" :loading="taskPanelLoading" @click="refreshTaskPanel">
+          刷新任务与统计
+        </el-button>
+      </div>
+      <div class="task-stats">
+        <span>未排课：<strong>{{ taskStats.unscheduled }}</strong></span>
+        <span>已排课：<strong>{{ taskStats.scheduled }}</strong></span>
+        <span>排课失败：<strong>{{ taskStats.failed }}</strong></span>
+      </div>
+      <div v-loading="taskPanelLoading" class="task-table-wrap">
+        <table v-if="unscheduledTasks.length" class="task-table-native">
+          <thead>
+            <tr>
+              <th>任务 ID</th>
+              <th>课程</th>
+              <th>教师</th>
+              <th>班级</th>
+              <th>周期（默认）</th>
+              <th>连堂</th>
+              <th class="col-action">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="row in unscheduledTasks"
+              :key="row.taskId"
+              class="task-draggable-row"
+              draggable="true"
+              @dragstart="onTaskDragStart(row, $event)"
+            >
+              <td>{{ row.taskId }}</td>
+              <td>{{ row.courseName || '-' }}</td>
+              <td>{{ row.teacherName || '-' }}</td>
+              <td>{{ row.className || '-' }}</td>
+              <td>{{ row.courseStartWeek ?? '-' }} ~ {{ row.courseEndWeek ?? '-' }} 周</td>
+              <td>{{ row.courseSingleHour ?? 1 }} 节</td>
+              <td class="col-action">
+                <el-button type="primary" link size="small" @click="openManualDialog(row)">
+                  手动编排
+                </el-button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <el-empty v-else description="暂无未排课任务" :image-size="80" />
+      </div>
+      <div class="drag-hint">提示：在下方课表查询有效时，可将本列表中的任务（行）拖拽到空白格。</div>
+    </section>
+
     <!-- 全局聚合课表 -->
     <section class="table-card">
       <div v-if="loading" class="grid-loading">
@@ -130,7 +197,10 @@
                 <td
                   v-if="!getCompositeCell(sec.value, day.value).skip"
                   class="content-cell content-cell-composite"
+                  :class="{ 'grid-drop-target': isGridDropTarget(sec.value, day.value) }"
                   :rowspan="getCompositeCell(sec.value, day.value).rowspan || 1"
+                  @dragover.prevent="onGridDragOver"
+                  @drop.prevent="onGridDrop(sec.value, day.value, $event)"
                 >
                   <div
                     v-for="(item, idx) in getCompositeCell(sec.value, day.value).items"
@@ -176,7 +246,10 @@
                 <td
                   v-if="!getCompositeCell(sec.value, day.value).skip"
                   class="content-cell content-cell-composite"
+                  :class="{ 'grid-drop-target': isGridDropTarget(sec.value, day.value) }"
                   :rowspan="getCompositeCell(sec.value, day.value).rowspan || 1"
+                  @dragover.prevent="onGridDragOver"
+                  @drop.prevent="onGridDrop(sec.value, day.value, $event)"
                 >
                   <div
                     v-for="(item, idx) in getCompositeCell(sec.value, day.value).items"
@@ -222,7 +295,10 @@
                 <td
                   v-if="!getCompositeCell(sec.value, day.value).skip"
                   class="content-cell content-cell-composite"
+                  :class="{ 'grid-drop-target': isGridDropTarget(sec.value, day.value) }"
                   :rowspan="getCompositeCell(sec.value, day.value).rowspan || 1"
+                  @dragover.prevent="onGridDragOver"
+                  @drop.prevent="onGridDrop(sec.value, day.value, $event)"
                 >
                   <div
                     v-for="(item, idx) in getCompositeCell(sec.value, day.value).items"
@@ -259,6 +335,77 @@
         </table>
       </div>
     </section>
+
+    <el-dialog
+      v-model="manualVisible"
+      title="手动编排排课"
+      width="520px"
+      destroy-on-close
+      @closed="onManualDialogClosed"
+    >
+      <div v-if="manualTask" class="manual-task-summary">
+        <span>{{ manualTask.courseName }}</span>
+        <span class="sep">·</span>
+        <span>{{ manualTask.teacherName }}</span>
+        <span class="sep">·</span>
+        <span>{{ manualTask.className }}</span>
+      </div>
+      <el-form label-width="100px" class="manual-form">
+        <el-form-item label="起始教学周">
+          <el-select v-model="manualForm.startWeek" placeholder="周次" filterable style="width: 100%">
+            <el-option v-for="w in weekOptions" :key="'sw-' + w" :label="'第 ' + w + ' 周'" :value="w" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="结束教学周">
+          <el-select v-model="manualForm.endWeek" placeholder="周次" filterable style="width: 100%">
+            <el-option v-for="w in weekOptions" :key="'ew-' + w" :label="'第 ' + w + ' 周'" :value="w" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="星期">
+          <el-select v-model="manualForm.weekday" placeholder="星期" style="width: 100%">
+            <el-option v-for="d in weekdays" :key="d.value" :label="d.label" :value="d.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="起始节次">
+          <el-select v-model="manualForm.section" placeholder="节次" style="width: 100%">
+            <el-option v-for="s in sections" :key="s.value" :label="s.label" :value="s.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="教室">
+          <el-select
+            v-model="manualForm.classroomId"
+            placeholder="请选择教室"
+            filterable
+            clearable
+            style="width: 100%"
+          >
+            <el-option
+              v-for="item in filteredManualClassrooms"
+              :key="item.classroomId"
+              :label="`${item.classroomName}（容量 ${item.classroomCap ?? '-'}）`"
+              :value="item.classroomId"
+            />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div v-if="manualValidateHint" class="manual-validate" :class="manualValidateHint.ok ? 'is-ok' : 'is-bad'">
+        {{ manualValidateHint.ok ? manualValidateHint.message : '冲突：' + manualValidateHint.message }}
+      </div>
+      <div v-else-if="manualForm.classroomId && manualValidateLoading" class="manual-validate is-loading">
+        校验中…
+      </div>
+      <template #footer>
+        <el-button @click="manualVisible = false">取消</el-button>
+        <el-button
+          type="primary"
+          :loading="manualSubmitting"
+          :disabled="!canSubmitManual"
+          @click="submitManualSchedule"
+        >
+          确认排课
+        </el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -273,15 +420,37 @@ import {
   getClassSchedule,
   getTeacherSchedule,
   getClassroomSchedule,
-  autoSchedule
+  autoSchedule,
+  resetAutoScheduling,
+  validateManualSchedule,
+  manualSchedule as submitManualScheduleApi
 } from '../api/schedule'
+import { getTeachingTaskPage } from '../api/teachingTask'
 
 const teacherOptions = ref([])
 const classOptions = ref([])
 const classroomOptions = ref([])
 const loading = ref(false)
 const isAutoScheduling = ref(false)
+const isResettingSchedule = ref(false)
 const rawScheduleList = ref([])
+
+const taskPanelLoading = ref(false)
+const taskStats = reactive({ unscheduled: 0, scheduled: 0, failed: 0 })
+const unscheduledTasks = ref([])
+const manualVisible = ref(false)
+const manualTask = ref(null)
+const manualForm = reactive({
+  startWeek: 1,
+  endWeek: 20,
+  weekday: 1,
+  section: 1,
+  classroomId: null
+})
+const manualValidateHint = ref(null)
+const manualValidateLoading = ref(false)
+const manualSubmitting = ref(false)
+let manualValidateTimer = null
 
 const weekdays = [
   { value: 1, label: '周一' },
@@ -292,6 +461,8 @@ const weekdays = [
   { value: 6, label: '周六' },
   { value: 7, label: '周日' }
 ]
+
+const weekOptions = Array.from({ length: 20 }, (_, i) => i + 1)
 
 const sections = [
   { value: 1, label: '第 1 节（上午）' },
@@ -321,6 +492,224 @@ const hasValidSelection = computed(() => {
   if (queryForm.mode === 'teacher') return !!queryForm.teacherId
   return false
 })
+
+const filteredManualClassrooms = computed(() => {
+  const task = manualTask.value
+  const list = classroomOptions.value || []
+  if (!task) return list
+  const n = task.classNum ?? 0
+  const req = task.requiredClassroomType
+  return list.filter((r) => {
+    if (r.classroomState != null && r.classroomState !== '' && r.classroomState !== '可用') {
+      return false
+    }
+    if (r.classroomCap != null && r.classroomCap < n) return false
+    if (req && r.classroomType && r.classroomType !== req) return false
+    return true
+  })
+})
+
+const canSubmitManual = computed(() => {
+  if (!manualTask.value || manualSubmitting.value) return false
+  if (
+    manualForm.classroomId == null ||
+    manualForm.weekday == null ||
+    manualForm.section == null
+  ) {
+    return false
+  }
+  if (!manualForm.startWeek || !manualForm.endWeek) return false
+  if (manualForm.startWeek > manualForm.endWeek) return false
+  return manualValidateHint.value?.ok === true
+})
+
+async function refreshTaskPanel() {
+  taskPanelLoading.value = true
+  try {
+    await Promise.all([fetchTaskStats(), fetchUnscheduledTasks()])
+  } finally {
+    taskPanelLoading.value = false
+  }
+}
+
+async function fetchTaskStats() {
+  try {
+    const [r1, r2, r3] = await Promise.all([
+      getTeachingTaskPage({ pageNum: 1, pageSize: 1, taskState: '未排课' }),
+      getTeachingTaskPage({ pageNum: 1, pageSize: 1, taskState: '已排课' }),
+      getTeachingTaskPage({ pageNum: 1, pageSize: 1, taskState: '排课失败' })
+    ])
+    const pickTotal = (res) =>
+      res?.data?.code === 1 && res.data.data != null ? Number(res.data.data.total ?? 0) : 0
+    taskStats.unscheduled = pickTotal(r1)
+    taskStats.scheduled = pickTotal(r2)
+    taskStats.failed = pickTotal(r3)
+  } catch {
+    taskStats.unscheduled = 0
+    taskStats.scheduled = 0
+    taskStats.failed = 0
+  }
+}
+
+async function fetchUnscheduledTasks() {
+  try {
+    const res = await getTeachingTaskPage({ pageNum: 1, pageSize: 500, taskState: '未排课' })
+    if (res?.data?.code === 1 && res.data.data?.rows) {
+      unscheduledTasks.value = res.data.data.rows
+    } else {
+      unscheduledTasks.value = []
+    }
+  } catch {
+    unscheduledTasks.value = []
+  }
+}
+
+function openManualDialog(row, preset = null) {
+  manualTask.value = row
+  manualForm.startWeek = row.courseStartWeek ?? 1
+  manualForm.endWeek = row.courseEndWeek ?? 20
+  manualForm.weekday = preset?.weekday ?? 1
+  manualForm.section = preset?.section ?? 1
+  manualForm.classroomId = null
+  manualValidateHint.value = null
+  manualVisible.value = true
+}
+
+function onManualDialogClosed() {
+  manualTask.value = null
+  manualValidateHint.value = null
+}
+
+function scheduleManualValidate() {
+  clearTimeout(manualValidateTimer)
+  manualValidateTimer = setTimeout(() => {
+    runManualValidate()
+  }, 380)
+}
+
+async function runManualValidate() {
+  if (!manualVisible.value || !manualTask.value) return
+  if (manualForm.classroomId == null) {
+    manualValidateHint.value = null
+    return
+  }
+  manualValidateLoading.value = true
+  manualValidateHint.value = null
+  try {
+    const res = await validateManualSchedule({
+      taskId: manualTask.value.taskId,
+      classroomId: manualForm.classroomId,
+      weekday: manualForm.weekday,
+      section: manualForm.section,
+      startWeek: manualForm.startWeek,
+      endWeek: manualForm.endWeek
+    })
+    const body = res?.data
+    if (body?.code === 1 && body.data) {
+      manualValidateHint.value = {
+        ok: !!body.data.ok,
+        message: body.data.message || ''
+      }
+    } else {
+      manualValidateHint.value = { ok: false, message: body?.msg || '校验失败' }
+    }
+  } catch (e) {
+    const msg = e?.response?.data?.msg || e?.message || '校验请求失败'
+    manualValidateHint.value = {
+      ok: false,
+      message: typeof msg === 'string' ? msg : '校验请求失败'
+    }
+  } finally {
+    manualValidateLoading.value = false
+  }
+}
+
+watch(
+  manualForm,
+  () => {
+    if (manualVisible.value) scheduleManualValidate()
+  },
+  { deep: true }
+)
+
+watch(manualVisible, (v) => {
+  if (v && manualTask.value) scheduleManualValidate()
+})
+
+async function submitManualSchedule() {
+  if (!canSubmitManual.value || !manualTask.value) return
+  manualSubmitting.value = true
+  try {
+    const res = await submitManualScheduleApi({
+      taskId: manualTask.value.taskId,
+      classroomId: manualForm.classroomId,
+      weekday: manualForm.weekday,
+      section: manualForm.section,
+      startWeek: manualForm.startWeek,
+      endWeek: manualForm.endWeek
+    })
+    if (res?.data?.code === 1) {
+      ElMessage.success('手动排课成功')
+      manualVisible.value = false
+      await refreshTaskPanel()
+      if (hasValidSelection.value) {
+        await handleQuery()
+      }
+    } else {
+      ElMessage.error(res?.data?.msg || '排课失败')
+    }
+  } catch (e) {
+    const msg = e?.response?.data?.msg || e?.message || '排课失败'
+    ElMessage.error(typeof msg === 'string' ? msg : '排课失败')
+  } finally {
+    manualSubmitting.value = false
+  }
+}
+
+function isGridDropTarget(sec, weekday) {
+  if (!hasValidSelection.value || loading.value) return false
+  const cell = getCompositeCell(sec, weekday)
+  if (cell.skip || (cell.items && cell.items.length > 0)) return false
+  return true
+}
+
+function onGridDragOver() {}
+
+function onGridDrop(sec, weekday, ev) {
+  let raw = ''
+  try {
+    raw = ev.dataTransfer?.getData('application/json') || ''
+  } catch {
+    return
+  }
+  if (!raw) return
+  let payload
+  try {
+    payload = JSON.parse(raw)
+  } catch {
+    return
+  }
+  const tid = payload.taskId
+  const row = unscheduledTasks.value.find((t) => t.taskId === tid)
+  if (!row) {
+    ElMessage.warning('请从上方「未排课」列表拖拽任务')
+    return
+  }
+  if (!isGridDropTarget(sec, weekday)) {
+    ElMessage.warning('该时间格已有课或不可放置')
+    return
+  }
+  openManualDialog(row, { weekday, section: sec })
+}
+
+function onTaskDragStart(row, ev) {
+  try {
+    ev.dataTransfer?.setData('application/json', JSON.stringify({ taskId: row.taskId }))
+    ev.dataTransfer.effectAllowed = 'copy'
+  } catch {
+    /* ignore */
+  }
+}
 
 const fetchOptions = async () => {
   try {
@@ -522,6 +911,7 @@ const handleAutoSchedule = async () => {
 
     if (data && data.code === 1) {
       ElMessage.success('排课完成！')
+      await refreshTaskPanel()
       if (hasValidSelection.value) {
         await handleQuery()
       }
@@ -537,6 +927,50 @@ const handleAutoSchedule = async () => {
     ElMessage.error(msg)
   } finally {
     isAutoScheduling.value = false
+  }
+}
+
+const handleResetSchedule = async () => {
+  try {
+    await ElMessageBox.confirm(
+      '此操作将清空全校所有已排课表并将任务恢复为未排课状态，是否继续？',
+      '危险操作',
+      {
+        type: 'warning',
+        confirmButtonText: '确认清空',
+        cancelButtonText: '取消',
+        confirmButtonClass: 'el-button--danger'
+      }
+    )
+  } catch {
+    return
+  }
+
+  isResettingSchedule.value = true
+  try {
+    const res = await resetAutoScheduling()
+    const { data } = res || {}
+
+    if (data && data.code === 1) {
+      ElMessage.success('课表已清空，全部任务已恢复为未排课')
+      await refreshTaskPanel()
+      if (hasValidSelection.value) {
+        await handleQuery()
+      } else {
+        buildCompositeGrid([])
+      }
+    } else {
+      ElMessage.error(data?.msg || '重置失败')
+    }
+  } catch (err) {
+    const msg =
+      err?.response?.data?.msg ||
+      err?.response?.data?.message ||
+      err?.message ||
+      '重置失败'
+    ElMessage.error(msg)
+  } finally {
+    isResettingSchedule.value = false
   }
 }
 
@@ -559,6 +993,7 @@ watch(
 
 onMounted(() => {
   fetchOptions()
+  refreshTaskPanel()
 })
 </script>
 
@@ -728,5 +1163,134 @@ onMounted(() => {
   background: var(--el-fill-color-light);
   color: var(--el-text-color-secondary);
   font-size: 12px;
+}
+
+.task-panel-card {
+  margin-bottom: 16px;
+  padding: 16px 18px;
+  background: var(--el-bg-color);
+  border: 1px solid var(--el-border-color-lighter);
+  border-radius: 14px;
+}
+
+.task-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.task-panel-header h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.task-panel-desc {
+  margin: 0;
+  font-size: 13px;
+  color: var(--el-text-color-secondary);
+  line-height: 1.5;
+  max-width: 720px;
+}
+
+.task-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--el-text-color-regular);
+}
+
+.task-stats strong {
+  color: var(--el-color-primary);
+  font-weight: 600;
+}
+
+.task-table-wrap {
+  min-height: 80px;
+}
+
+.task-table-native {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.task-table-native th,
+.task-table-native td {
+  border: 1px solid var(--el-border-color-lighter);
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.task-table-native th {
+  background: var(--el-fill-color-light);
+  font-weight: 600;
+}
+
+.task-draggable-row {
+  cursor: grab;
+}
+
+.task-draggable-row:active {
+  cursor: grabbing;
+}
+
+.task-table-native .col-action {
+  white-space: nowrap;
+  width: 112px;
+}
+
+.drag-hint {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--el-text-color-secondary);
+}
+
+.grid-drop-target {
+  box-shadow: inset 0 0 0 2px var(--el-color-primary-light-5);
+}
+
+.manual-task-summary {
+  margin-bottom: 14px;
+  font-size: 13px;
+  color: var(--el-text-color-regular);
+}
+
+.manual-task-summary .sep {
+  margin: 0 6px;
+  opacity: 0.45;
+}
+
+.manual-form {
+  margin-top: 4px;
+}
+
+.manual-validate {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.manual-validate.is-ok {
+  background: var(--el-color-success-light-9);
+  color: var(--el-color-success);
+  border: 1px solid var(--el-color-success-light-5);
+}
+
+.manual-validate.is-bad {
+  background: var(--el-color-danger-light-9);
+  color: var(--el-color-danger);
+  border: 1px solid var(--el-color-danger-light-5);
+}
+
+.manual-validate.is-loading {
+  background: var(--el-fill-color-light);
+  color: var(--el-text-color-secondary);
 }
 </style>

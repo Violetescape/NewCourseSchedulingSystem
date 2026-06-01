@@ -8,23 +8,31 @@
     <!--
         条件分页查询教学任务列表：
         - 主表：teaching_task t
-        - 关联：teacher te, course c, class cl
-        - 映射到：violet.pojo.TeachingTaskVO
+        - 关联：teacher te, course c
+        - 合班班级名 / 人数通过子查询聚合
      -->
     <select id="findByCondition" resultType="violet.pojo.TeachingTaskVO">
         select
             t.Task_ID    as taskId,
             t.Teacher_ID as teacherId,
             t.Course_ID  as courseId,
-            t.Class_ID   as classId,
+            t.Class_Ids  as classIds,
             t.Task_State as taskState,
             te.Teacher_Name as teacherName,
             c.Course_Name  as courseName,
-            cl.Class_Name  as className
+            (select group_concat(cl.Class_Name order by cl.Class_ID separator '、')
+             from class cl
+             where find_in_set(cl.Class_ID, t.Class_Ids)) as className,
+            (select coalesce(sum(cl.Class_Num), 0)
+             from class cl
+             where find_in_set(cl.Class_ID, t.Class_Ids)) as classNum,
+            c.Course_StartWeek  as courseStartWeek,
+            c.Course_EndWeek    as courseEndWeek,
+            c.Course_SingleHour as courseSingleHour,
+            COALESCE(NULLIF(c.Required_Classroom_Type, ''), '普通教室') as requiredClassroomType
         from teaching_task t
         left join teacher te on t.Teacher_ID = te.Teacher_ID
         left join course c   on t.Course_ID  = c.Course_ID
-        left join class cl   on t.Class_ID   = cl.Class_ID
         <where>
             <if test="teacherId != null">
                 and t.Teacher_ID = #{teacherId}
@@ -33,7 +41,7 @@
                 and t.Course_ID = #{courseId}
             </if>
             <if test="classId != null">
-                and t.Class_ID = #{classId}
+                and find_in_set(#{classId}, t.Class_Ids)
             </if>
             <if test="taskState != null and taskState != ''">
                 and t.Task_State = #{taskState}
@@ -55,7 +63,7 @@
                 and t.Course_ID = #{courseId}
             </if>
             <if test="classId != null">
-                and t.Class_ID = #{classId}
+                and find_in_set(#{classId}, t.Class_Ids)
             </if>
             <if test="taskState != null and taskState != ''">
                 and t.Task_State = #{taskState}
@@ -63,13 +71,38 @@
         </where>
     </select>
 
+    <select id="findVoByTaskId" resultType="violet.pojo.TeachingTaskVO">
+        select
+            t.Task_ID    as taskId,
+            t.Teacher_ID as teacherId,
+            t.Course_ID  as courseId,
+            t.Class_Ids  as classIds,
+            t.Task_State as taskState,
+            te.Teacher_Name as teacherName,
+            c.Course_Name  as courseName,
+            (select group_concat(cl.Class_Name order by cl.Class_ID separator '、')
+             from class cl
+             where find_in_set(cl.Class_ID, t.Class_Ids)) as className,
+            (select coalesce(sum(cl.Class_Num), 0)
+             from class cl
+             where find_in_set(cl.Class_ID, t.Class_Ids)) as classNum,
+            c.Course_StartWeek  as courseStartWeek,
+            c.Course_EndWeek    as courseEndWeek,
+            c.Course_SingleHour as courseSingleHour,
+            COALESCE(NULLIF(c.Required_Classroom_Type, ''), '普通教室') as requiredClassroomType
+        from teaching_task t
+        left join teacher te on t.Teacher_ID = te.Teacher_ID
+        left join course c   on t.Course_ID  = c.Course_ID
+        where t.Task_ID = #{taskId}
+        limit 1
+    </select>
+
     <insert id="insertBatch">
-        insert into teaching_task(Teacher_ID, Course_ID, Class_ID, Task_State)
+        insert into teaching_task(Teacher_ID, Course_ID, Class_Ids, Task_State)
         values
         <foreach collection="list" item="item" separator=",">
-            (#{item.teacherId}, #{item.courseId}, #{item.classId}, #{item.taskState})
+            (#{item.teacherId}, #{item.courseId}, #{item.classIds}, #{item.taskState})
         </foreach>
     </insert>
 
 </mapper>
-

@@ -4,7 +4,31 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9c67d888-9ee1-4abf-9663-b187d4cecc1e" name="Changes" comment="备份3" />
+    <list default="true" id="9c67d888-9ee1-4abf-9663-b187d4cecc1e" name="Changes" comment="备份3">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/controller/AnalysisController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/controller/AnalysisController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/controller/AutoSchedulingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/controller/AutoSchedulingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/mapper/ClassroomMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/mapper/ClassroomMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/mapper/ScheduleMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/mapper/ScheduleMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/mapper/TeachingTaskMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/mapper/TeachingTaskMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/pojo/ScheduleRawDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/pojo/ScheduleRawDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/pojo/TeachingTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/pojo/TeachingTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/pojo/TeachingTaskExcelDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/pojo/TeachingTaskExcelDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/pojo/TeachingTaskVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/pojo/TeachingTaskVO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/AnalysisService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/AnalysisService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/AutoSchedulingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/AutoSchedulingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/impl/AnalysisServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/impl/AnalysisServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/impl/AutoSchedulingServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/impl/AutoSchedulingServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/impl/TeachingTaskServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/java/violet/service/impl/TeachingTaskServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/resources/mapper/ScheduleMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/resources/mapper/ScheduleMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Course-System/src/main/resources/mapper/TeachingTaskMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Course-System/src/main/resources/mapper/TeachingTaskMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/api/analysis.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/analysis.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/api/schedule.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/schedule.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/AnalysisView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/AnalysisView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/AutoScheduleView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/AutoScheduleView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/ClassroomManage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/ClassroomManage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/TeachingTaskManage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/TeachingTaskManage.vue" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -114,7 +138,8 @@
       <workItem from="1774921804463" duration="1361000" />
       <workItem from="1774929758316" duration="2704000" />
       <workItem from="1774951499324" duration="2860000" />
-      <workItem from="1777954142356" duration="348000" />
+      <workItem from="1777954142356" duration="2181000" />
+      <workItem from="1780292528382" duration="6178000" />
     </task>
     <task id="LOCAL-00001" summary="整合">
       <option name="closed" value="true" />
@@ -220,7 +245,15 @@
       <option name="project" value="LOCAL" />
       <updated>1777954401818</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="备份3">
+      <option name="closed" value="true" />
+      <created>1777954512676</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1777954512676</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

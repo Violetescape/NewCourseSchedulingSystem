@@ -213,11 +213,14 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="上课班级" prop="classId">
+        <el-form-item label="上课班级" prop="classIdsArray">
           <el-select
-            v-model="dialogForm.classId"
-            placeholder="请选择上课班级"
+            v-model="dialogForm.classIdsArray"
+            placeholder="请选择上课班级（可多选合班）"
             filterable
+            multiple
+            collapse-tags
+            collapse-tags-tooltip
             style="width: 100%"
           >
             <el-option
@@ -297,7 +300,7 @@ const dialogForm = reactive({
   taskId: null,
   teacherId: null,
   courseId: null,
-  classId: null,
+  classIdsArray: [],
   taskState: '未排课'
 })
 
@@ -308,8 +311,14 @@ const dialogRules = {
   courseId: [
     { required: true, message: '请选择授课课程', trigger: 'change' }
   ],
-  classId: [
-    { required: true, message: '请选择上课班级', trigger: 'change' }
+  classIdsArray: [
+    {
+      type: 'array',
+      required: true,
+      min: 1,
+      message: '请至少选择一个上课班级',
+      trigger: 'change'
+    }
   ],
   taskState: [
     { required: true, message: '请选择任务状态', trigger: 'change' }
@@ -421,7 +430,7 @@ const resetDialogForm = () => {
   dialogForm.taskId = null
   dialogForm.teacherId = null
   dialogForm.courseId = null
-  dialogForm.classId = null
+  dialogForm.classIdsArray = []
   dialogForm.taskState = '未排课'
   if (dialogFormRef.value) {
     dialogFormRef.value.clearValidate()
@@ -434,13 +443,23 @@ const handleOpenAddDialog = () => {
   dialogVisible.value = true
 }
 
+const parseClassIdsToArray = (classIds) => {
+  if (!classIds || typeof classIds !== 'string') return []
+  return classIds
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .map((s) => Number(s))
+    .filter((n) => !Number.isNaN(n))
+}
+
 const handleOpenEditDialog = (row) => {
   if (!row) return
   isEdit.value = true
   dialogForm.taskId = row.taskId
   dialogForm.teacherId = row.teacherId
   dialogForm.courseId = row.courseId
-  dialogForm.classId = row.classId
+  dialogForm.classIdsArray = parseClassIdsToArray(row.classIds)
   dialogForm.taskState = row.taskState || '未排课'
   if (dialogFormRef.value) {
     dialogFormRef.value.clearValidate()
@@ -458,7 +477,7 @@ const handleSubmit = () => {
         taskId: dialogForm.taskId,
         teacherId: dialogForm.teacherId,
         courseId: dialogForm.courseId,
-        classId: dialogForm.classId,
+        classIds: dialogForm.classIdsArray.join(','),
         taskState: dialogForm.taskState
       }
 

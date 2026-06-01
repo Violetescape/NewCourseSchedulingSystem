@@ -12,6 +12,6 @@ public class TeachingTaskExcelDTO {
     @ExcelProperty("课程名称")
     private String courseName;
 
-    @ExcelProperty("班级名称")
+    @ExcelProperty("班级名称（多个班级用逗号分隔，支持合班）")
     private String className;
 }

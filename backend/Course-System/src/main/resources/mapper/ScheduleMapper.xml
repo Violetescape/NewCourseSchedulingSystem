@@ -47,6 +47,17 @@
         order by s.Schedule_Weekday, s.Schedule_Section, s.Schedule_ID
     </select>
 
+    <!-- 按教学任务删除排课记录（合班多班级） -->
+    <delete id="deleteByTaskKeys">
+        delete from schedule
+        where Schedule_Teacher_ID = #{teacherId}
+          and Schedule_Course_ID = #{courseId}
+          and Schedule_Class_ID in
+        <foreach collection="classIdList" item="cid" open="(" separator="," close=")">
+            #{cid}
+        </foreach>
+    </delete>
+
     <!-- 查询所有排课原始记录（用于冲突检测模型初始化），关联 course 获取 courseSingleHour -->
     <select id="findAllRawForConflict" resultType="violet.pojo.ScheduleRawDTO">
         select
@@ -56,7 +67,8 @@
             s.Schedule_Weekday as weekday,
             s.Schedule_Section as section,
             s.Schedule_Week as week,
-            coalesce(c.Course_SingleHour, 1) as courseSingleHour
+            coalesce(c.Course_SingleHour, 1) as courseSingleHour,
+            c.Course_Type as courseType
         from schedule s
         left join course c on s.Schedule_Course_ID = c.Course_ID
     </select>

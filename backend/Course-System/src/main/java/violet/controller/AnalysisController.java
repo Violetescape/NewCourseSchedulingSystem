@@ -38,5 +38,37 @@ public class AnalysisController {
     public Result heatmap() {
         return Result.success(analysisService.getHeatmapNodes());
     }
+
+    /**
+     * 教室类型资源占比（饼图 / 环形图）。
+     */
+    @GetMapping("/analysis/classroom-type-distribution")
+    public Result classroomTypeDistribution() {
+        return Result.success(analysisService.getClassroomTypeDistribution());
+    }
+
+    /**
+     * 周一至周五课时负荷趋势（折线图）。
+     */
+    @GetMapping("/analysis/weekday-lesson-trend")
+    public Result weekdayLessonTrend() {
+        return Result.success(analysisService.getWeekdayLessonTrend());
+    }
+
+    /**
+     * 课程类型学时占比（扇形图）。
+     */
+    @GetMapping("/analysis/course-type-hours")
+    public Result courseTypeHours() {
+        return Result.success(analysisService.getCourseTypeHourDistribution());
+    }
+
+    /**
+     * 教室容量区间分布（柱状图）。
+     */
+    @GetMapping("/analysis/classroom-capacity-distribution")
+    public Result classroomCapacityDistribution() {
+        return Result.success(analysisService.getClassroomCapacityDistribution());
+    }
 }
 

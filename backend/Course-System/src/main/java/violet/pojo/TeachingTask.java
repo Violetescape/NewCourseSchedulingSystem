@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
  * Task_ID    -> taskId
  * Teacher_ID -> teacherId
  * Course_ID  -> courseId
- * Class_ID   -> classId
+ * Class_Ids  -> classIds（逗号分隔的班级 ID，如 "1,2,3"）
  * Task_State -> taskState
  * </p>
  */
@@ -36,13 +36,12 @@ public class TeachingTask {
     private Integer courseId;
 
     /**
-     * 上课班级 ID
+     * 上课班级 ID 列表（逗号分隔，如 "1,2,3"）
      */
-    private Integer classId;
+    private String classIds;
 
     /**
      * 任务状态：未排课 / 已排课
      */
     private String taskState;
 }
-

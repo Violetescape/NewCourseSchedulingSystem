@@ -3,7 +3,7 @@
     <section class="toolbar-card">
       <div class="toolbar-header">
         <div class="title-block">
-          <h2>教室数字孪生 · 楼宇矩阵</h2>
+          <h2>教室矩阵</h2>
           <p>按大区聚合展示 A/B/C 区 1-4 楼教室分布，点击房间查看效能详情。</p>
         </div>
         <div class="toolbar-actions">

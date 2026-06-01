@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import violet.pojo.Classroom;
 
@@ -75,5 +76,13 @@ public interface ClassroomMapper {
      * @return 教室列表
      */
     List<Classroom> findAllOrderByCapacityAsc();
+
+    /**
+     * 根据 ID 查询教室。
+     */
+    @Select("select Classroom_ID as classroomId, Classroom_Type as classroomType, " +
+            "Classroom_Cap as classroomCap, Classroom_State as classroomState, " +
+            "Classroom_Name as classroomName from classroom where Classroom_ID = #{classroomId}")
+    Classroom findById(Integer classroomId);
 }
 
