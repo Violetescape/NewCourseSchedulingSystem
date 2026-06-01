@@ -6,23 +6,23 @@
 <mapper namespace="violet.mapper.ScheduleMapper">
 
     <!--
-        按周查询课表：
-        LEFT JOIN schedule, class, teacher, course, classroom 五张表
-        返回 ScheduleVO
+        按周查询课表（合班聚合）：
+        同一教师+课程+教室+周次+星期+节次的多条 schedule 合并为一行，
+        班级名用 GROUP_CONCAT 拼接，避免前端表格重复与网格坐标覆盖。
      -->
     <select id="findScheduleList" resultType="violet.pojo.ScheduleVO">
         select
-            s.Schedule_ID as scheduleId,
-            cl.Class_Name as className,
-            t.Teacher_Name as teacherName,
-            c.Course_Name as courseName,
-            cr.Classroom_Name as classroomName,
+            MIN(s.Schedule_ID) as scheduleId,
+            GROUP_CONCAT(cl.Class_Name ORDER BY cl.Class_ID SEPARATOR '、') as className,
+            MAX(t.Teacher_Name) as teacherName,
+            MAX(c.Course_Name) as courseName,
+            MAX(cr.Classroom_Name) as classroomName,
             s.Schedule_Weekday as weekday,
             s.Schedule_Section as section,
             s.Schedule_Week as week,
-            c.Course_SingleHour as courseSingleHour,
-            c.Course_StartWeek as courseStartWeek,
-            c.Course_EndWeek as courseEndWeek,
+            MAX(c.Course_SingleHour) as courseSingleHour,
+            MAX(c.Course_StartWeek) as courseStartWeek,
+            MAX(c.Course_EndWeek) as courseEndWeek,
             s.Schedule_Course_ID as scheduleCourseId,
             s.Schedule_Classroom_ID as scheduleClassroomId
         from schedule s
@@ -32,7 +32,7 @@
         left join classroom cr on s.Schedule_Classroom_ID = cr.Classroom_ID
         <where>
             <if test="week != null">
-                and #{week} between c.Course_StartWeek and c.Course_EndWeek
+                and s.Schedule_Week = #{week}
             </if>
             <if test="classId != null">
                 and s.Schedule_Class_ID = #{classId}
@@ -44,7 +44,14 @@
                 and s.Schedule_Classroom_ID = #{classroomId}
             </if>
         </where>
-        order by s.Schedule_Weekday, s.Schedule_Section, s.Schedule_ID
+        group by
+            s.Schedule_Teacher_ID,
+            s.Schedule_Course_ID,
+            s.Schedule_Classroom_ID,
+            s.Schedule_Week,
+            s.Schedule_Weekday,
+            s.Schedule_Section
+        order by s.Schedule_Weekday, s.Schedule_Section, MIN(s.Schedule_ID)
     </select>
 
     <!-- 按教学任务删除排课记录（合班多班级） -->
